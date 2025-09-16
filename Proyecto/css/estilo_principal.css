@@ -1,0 +1,306 @@
+/* --- Variables CSS --- */
+:root {
+    --primary-color: #007bff; /* Azul vibrante para acentos */
+    --primary-hover: #0056b3;
+    --text-color: #333;
+    --text-light: #666;
+    --background-light: #f4f7fa; /* Fondo general de la app */
+    --card-background: #ffffff;
+    --border-color: #e0e0e0;
+    --sidebar-bg: #2c3e50; /* Gris oscuro/azulado para sidebar */
+    --sidebar-text: #ecf0f1; /* Texto claro para sidebar */
+    --sidebar-hover: #34495e;
+    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    /* Colores para las "píldoras" de estado */
+    --status-en-stock-bg: #e6ffe6;
+    --status-en-stock-text: #28a745; /* Verde */
+    --status-bajo-stock-bg: #fff8e6;
+    --status-bajo-stock-text: #ffc107; /* Naranja/Amarillo */
+    --status-sin-stock-bg: #ffe6e6;
+    --status-sin-stock-text: #dc3545; /* Rojo */
+}
+
+/* --- Reset Básico y Estilos Generales --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Para centrar la app en la pantalla */
+}
+
+/* Ocultar elementos visualmente pero mantenerlos para accesibilidad */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* --- Contenedor Principal de la Aplicación --- */
+.app-container {
+    display: flex;
+    width: 1200px; /* Ancho fijo para la aplicación de escritorio */
+    max-width: 95%; /* Asegura que no desborde en pantallas muy pequeñas */
+    height: 90vh; /* Altura para dar sensación de aplicación de escritorio */
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Para que los bordes redondeados se vean bien */
+}
+
+/* --- Sidebar (Barra de Navegación Lateral) --- */
+.sidebar {
+    width: 220px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Previene que se encoja */
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.icon-logo {
+    font-size: 3rem;
+    color: var(--primary-color); /* Color del logo */
+    margin-bottom: 5px;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav ul li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-nav ul li a:hover,
+.sidebar-nav ul li a.active { /* Clase 'active' para la página actual */
+    background-color: var(--sidebar-hover);
+    color: var(--primary-color);
+}
+
+.nav-icon {
+    margin-right: 15px;
+    font-size: 1.1rem;
+}
+
+/* --- Contenido Principal --- */
+.main-content {
+    flex-grow: 1; /* Ocupa el espacio restante */
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+/* Cabecera del Contenido Principal */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.content-header h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.add-product-btn {
+    background-color: var(--primary-color);
+    color: var(--card-background);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre ícono y texto */
+}
+
+.add-product-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* --- Sección de Filtros --- */
+.filters-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.filter-group {
+    position: relative;
+}
+
+.filter-select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    background-color: var(--card-background);
+    appearance: none; /* Elimina estilos nativos del select */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333333%22%20d%3D%22M287%20165.7l-12.8-12.8c-2.4-2.4-6.4-2.4-8.8%200l-117.2%20117.2c-2.4%202.4-6.4%202.4-8.8%200l-117.2-117.2c-2.4-2.4-6.4-2.4-8.8%200L5.4%20165.7c-2.4%202.4-2.4%206.4%200%208.8l138.8%20138.8c2.4%202.4%206.4%202.4%208.8%200l138.8-138.8c2.4-2.4%202.4-6.4%200-8.8z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha personalizada */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 35px; /* Espacio para la flecha */
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+
+/* --- Sección de Tabla de Inventario --- */
+.inventory-table-section {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    padding: 20px;
+}
+
+.table-controls {
+    display: flex;
+    justify-content: flex-end; /* Mueve la búsqueda a la derecha */
+    margin-bottom: 20px;
+}
+
+.search-box {
+    position: relative;
+    width: 250px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Espacio a la izquierda para el ícono */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 0.95rem;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+}
+
+.table-responsive {
+    overflow-x: auto; /* Para tablas grandes en pantallas más pequeñas (aunque es desktop) */
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.inventory-table th,
+.inventory-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.inventory-table th {
+    background-color: var(--background-light); /* Fondo para cabeceras */
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.inventory-table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05); /* Suave hover effect para filas */
+}
+
+/* Checkbox en la tabla */
+.inventory-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color); /* Color del checkbox al seleccionarlo */
+}
+
+/* "Píldoras" de Estado */
+.status-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 90px;
+}
+
+.status-en-stock {
+    background-color: var(--status-en-stock-bg);
+    color: var(--status-en-stock-text);
+}
+
+.status-bajo-stock {
+    background-color: var(--status-bajo-stock-bg);
+    color: var(--status-bajo-stock-text);
+}
+
+.status-sin-stock {
+    background-color: var(--status-sin-stock-bg);
+    color: var(--status-sin-stock-text);
+}
+
+/* Botones de acciones en cada fila */
+.actions-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 5px;
+    border: none;
+}

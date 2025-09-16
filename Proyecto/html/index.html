@@ -1,11 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capstone</title>
+    <title>Inventario - Aplicación</title>
+    <link rel="stylesheet" href="/Proyecto/css/estilo_principal.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h1>Holaaaa</h1>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-cube icon-logo"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-item"><i class="fas fa-chart-line nav-icon"></i> Dashboard</a></li>
+                    <li><a href="index.html" class="nav-item active"><i class="fas fa-box nav-icon"></i> Inventario</a></li> <li><a href="/Proyecto/html/perfil.html" class="nav-item"><i class="fas fa-user nav-icon"></i> Perfil</a></li> <li><a href="#" class="nav-item"><i class="fas fa-cog nav-icon"></i> Configuración</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Inventario</h1>
+                <button class="add-product-btn">
+                    <i class="fas fa-plus"></i> Añadir Nuevo Producto
+                </button>
+            </header>
+
+            <section class="filters-section">
+                <div class="filter-group">
+                    <label for="category-filter" class="visually-hidden">Filtrar por Categoría</label>
+                    <select id="category-filter" class="filter-select">
+                        <option value="">Filtrar por Categoría</option>
+                        <option value="electronica">Electrónica</option>
+                        <option value="oficina">Oficina</option>
+                        <option value="hogar">Hogar</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter" class="visually-hidden">Filtrar por Estado</label>
+                    <select id="status-filter" class="filter-select">
+                        <option value="">Filtrar por Estado</option>
+                        <option value="en-stock">En Stock</option>
+                        <option value="bajo-stock">Bajo Stock</option>
+                        <option value="sin-stock">Sin Stock</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="inventory-table-section">
+                <div class="table-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Buscar..." class="search-input">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="select-all-checkbox"></th>
+                                <th>Nombre del Producto</th>
+                                <th>SKU/Código</th>
+                                <th>Categoría</th>
+                                <th>Cantidad</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>Laptop Ultrabook X1</td>
+                                <td>LTUBX1-2023</td>
+                                <td>Electrónica</td>
+                                <td>50</td>
+                                <td><span class="status-pill status-en-stock">En Stock</span></td>
+                                <td>
+                                    <div class="actions-menu">
+                                        <button class="action-btn"><i class="fas fa-ellipsis-h"></i></button>
+                                        </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>Teclado Mecánico RGB</td>
+                                <td>TCRGB-GAMER</td>
+                                <td>Electrónica</td>
+                                <td>12</td>
+                                <td><span class="status-pill status-bajo-stock">Bajo Stock</span></td>
+                                <td>
+                                    <div class="actions-menu">
+                                        <button class="action-btn"><i class="fas fa-ellipsis-h"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>Monitor Curvo 27"</td>
+                                <td>MNCV27-2024</td>
+                                <td>Electrónica</td>
+                                <td>0</td>
+                                <td><span class="status-pill status-sin-stock">Sin Stock</span></td>
+                                <td>
+                                    <div class="actions-menu">
+                                        <button class="action-btn"><i class="fas fa-ellipsis-h"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
 </body>
 </html>
