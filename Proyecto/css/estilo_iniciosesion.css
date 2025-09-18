@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 1200px; /* Ancho fijo para la aplicación de escritorio */
+    width: 1800px; /* Ancho fijo para la aplicación de escritorio */
     max-width: 95%; /* Asegura que no desborde en pantallas muy pequeñas */
     height: 90vh; /* Altura para dar sensación de aplicación de escritorio */
 }
@@ -86,7 +86,7 @@ body {
     transition: background-color 0.2s ease, transform 0.1s ease;
     margin-top: 25px; /* Espacio superior */
     width: auto;
-    align-self: flex-start; /* Alinea a la izquierda en flexbox */
+    align-self: center; /* Alinea a la izquierda en flexbox */
     box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
 }
 /* Ocultar elementos visualmente pero mantenerlos para accesibilidad */
