@@ -1,31 +1,36 @@
-/* --- Variables CSS --- */
+/* ==========================================================================
+   1. VARIABLES CSS
+   ========================================================================== */
 :root {
-    --primary-color: #007bff; /* Azul vibrante para acentos */
+    --primary-color: #007bff;         /* Azul vibrante para acentos */
     --primary-hover: #0056b3;
-    --text-color: #333;
-    --text-light: #666;
-    --background-light: #f4f7fa; /* Fondo general de la app */
-    --card-background: #ffffff;
-    --border-color: #e0e0e0;
-    --sidebar-bg: #2c3e50; /* Gris oscuro/azulado para sidebar */
-    --sidebar-text: #ecf0f1; /* Texto claro para sidebar */
-    --sidebar-hover: #34495e;
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --text-color: #333;               /* Texto principal oscuro */
+    --text-light: #666;               /* Texto secundario gris */
+    --background-light: #f4f7fa;      /* Fondo general de la app y cabeceras de tabla */
+    --card-background: #ffffff;      /* Fondo de las "tarjetas" y el contenido principal */
+    --border-color: #e0e0e0;          /* Bordes sutiles */
+    --sidebar-bg: #2c3e50;            /* Gris oscuro/azulado para sidebar */
+    --sidebar-text: #ecf0f1;          /* Texto claro para sidebar */
+    --sidebar-hover: #34495e;         /* Fondo hover para sidebar */
+    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra ligera */
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);   /* Sombra media para tarjetas y contenedor de login */
 
     /* Colores para las "píldoras" de estado */
-    --status-en-stock-bg: #e6ffe6;
-    --status-en-stock-text: #28a745; /* Verde */
-    --status-bajo-stock-bg: #fff8e6;
-    --status-bajo-stock-text: #ffc107; /* Naranja/Amarillo */
-    --status-sin-stock-bg: #ffe6e6;
-    --status-sin-stock-text: #dc3545; /* Rojo */
+    --status-en-stock-bg: #d4edda;    /* Verde claro */
+    --status-en-stock-text: #155724;  /* Verde oscuro */
+    --status-bajo-stock-bg: #fff3cd;  /* Amarillo claro */
+    --status-bajo-stock-text: #856404; /* Amarillo oscuro */
+    --status-sin-stock-bg: #f8d7da;   /* Rojo claro */
+    --status-sin-stock-text: #721c24; /* Rojo oscuro */
 }
 
-/* --- Reset Básico y Estilos Generales --- */
+/* ==========================================================================
+   2. RESET BÁSICO Y ESTILOS GENERALES
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Fundamental para control de dimensiones */
 }
 
 body {
@@ -33,10 +38,15 @@ body {
     background-color: var(--background-light);
     color: var(--text-color);
     line-height: 1.6;
+    /* Para aplicaciones de escritorio, queremos que ocupen el 100% de la ventana */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Evita scrolls inesperados en el body */
+    /* Por defecto, body será flex para centrar el login.
+       Para la app principal, .app-container tiene sus propios flex. */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Para centrar la app en la pantalla */
 }
 
 /* Ocultar elementos visualmente pero mantenerlos para accesibilidad */
@@ -51,38 +61,38 @@ body {
     border: 0;
 }
 
-/* --- Contenedor Principal de la Aplicación --- */
+/* ==========================================================================
+   3. CONTENEDOR PRINCIPAL DE LA APLICACIÓN (PARA INVENTARIO Y PERFIL)
+   ========================================================================== */
 .app-container {
     display: flex;
-    width: 1200px; /* Ancho fijo para la aplicación de escritorio */
-    max-width: 95%; /* Asegura que no desborde en pantallas muy pequeñas */
-    height: 90vh; /* Altura para dar sensación de aplicación de escritorio */
-    background-color: var(--card-background);
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Para que los bordes redondeados se vean bien */
+    width: 100%; /* Ocupa el 100% del body (que ya es 100vw) */
+    height: 100%; /* Ocupa el 100% del body (que ya es 100vh) */
+    background-color: var(--card-background); /* Fondo de todo el "papel" de la app */
+    /* Aquí no queremos border-radius ni sombra, ya que la app llena la ventana */
 }
 
-/* --- Sidebar (Barra de Navegación Lateral) --- */
+/* ==========================================================================
+   4. SIDEBAR (BARRA DE NAVEGACIÓN LATERAL)
+   ========================================================================== */
 .sidebar {
-    width: 220px;
+    width: 240px; /* Ancho fijo para la barra lateral */
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
-    padding: 20px 0;
+    padding: 25px 0;
     display: flex;
     flex-direction: column;
-    flex-shrink: 0; /* Previene que se encoja */
+    flex-shrink: 0; /* Previene que se encoja cuando el contenido principal crece */
 }
 
 .sidebar-header {
     text-align: center;
-    margin-bottom: 30px;
-    padding: 0 20px;
+    margin-bottom: 40px; /* Más espacio inferior */
 }
 
 .icon-logo {
-    font-size: 3rem;
-    color: var(--primary-color); /* Color del logo */
+    font-size: 2.5rem; /* Tamaño del logo */
+    color: var(--primary-color);
     margin-bottom: 5px;
 }
 
@@ -93,31 +103,43 @@ body {
 .sidebar-nav ul li a {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
+    padding: 14px 25px; /* Ajuste de padding */
     color: var(--sidebar-text);
     text-decoration: none;
     font-size: 0.95rem;
+    font-weight: 500; /* Un poco más de peso */
     transition: background-color 0.2s ease, color 0.2s ease;
+    border-left: 3px solid transparent; /* Para el indicador activo */
 }
 
-.sidebar-nav ul li a:hover,
+.sidebar-nav ul li a:hover {
+    background-color: var(--sidebar-hover);
+    color: var(--primary-color); /* El color del texto activo es el primary */
+}
+
 .sidebar-nav ul li a.active { /* Clase 'active' para la página actual */
     background-color: var(--sidebar-hover);
     color: var(--primary-color);
+    border-left-color: var(--primary-color); /* Indicador azul en el lado */
 }
 
 .nav-icon {
-    margin-right: 15px;
-    font-size: 1.1rem;
+    margin-right: 18px; /* Más espacio entre ícono y texto */
+    font-size: 1.15rem;
+    width: 20px; /* Ancho fijo para alinear íconos */
+    text-align: center;
 }
 
-/* --- Contenido Principal --- */
+/* ==========================================================================
+   5. CONTENIDO PRINCIPAL (PARA INVENTARIO Y PERFIL)
+   ========================================================================== */
 .main-content {
-    flex-grow: 1; /* Ocupa el espacio restante */
-    padding: 30px;
+    flex-grow: 1; /* Ocupa todo el espacio restante */
+    padding: 35px; /* Padding general para el contenido */
     display: flex;
     flex-direction: column;
     overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+    background-color: var(--background-light); /* Fondo del área de contenido */
 }
 
 /* Cabecera del Contenido Principal */
@@ -125,74 +147,79 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px; /* Más espacio inferior */
 }
 
 .content-header h1 {
-    font-size: 2rem;
-    font-weight: 500;
+    font-size: 2.2rem; /* Título un poco más grande */
+    font-weight: 700; /* Más peso para el título principal */
     color: var(--text-color);
 }
 
 .add-product-btn {
     background-color: var(--primary-color);
-    color: var(--card-background);
+    color: var(--card-background); /* Texto blanco */
     border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
+    padding: 12px 22px; /* Ajuste de padding */
+    border-radius: 6px; /* Borde ligeramente más grande */
     font-size: 1rem;
+    font-weight: 600; /* Más peso para el botón */
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
     display: flex;
     align-items: center;
-    gap: 8px; /* Espacio entre ícono y texto */
+    gap: 10px; /* Espacio entre ícono y texto */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Sombra sutil */
 }
 
 .add-product-btn:hover {
     background-color: var(--primary-hover);
+    transform: translateY(-1px); /* Efecto sutil de "levantar" */
 }
 
-/* --- Sección de Filtros --- */
+/* ==========================================================================
+   6. SECCIÓN DE FILTROS (PARA INVENTARIO)
+   ========================================================================== */
 .filters-section {
     display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.filter-group {
-    position: relative;
+    gap: 20px; /* Más espacio entre los filtros */
+    margin-bottom: 30px; /* Más espacio inferior */
 }
 
 .filter-select {
-    padding: 10px 15px;
+    padding: 10px 18px; /* Ajuste de padding */
     border: 1px solid var(--border-color);
-    border-radius: 5px;
+    border-radius: 6px; /* Borde ligeramente más grande */
     font-size: 0.95rem;
     color: var(--text-color);
     background-color: var(--card-background);
     appearance: none; /* Elimina estilos nativos del select */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333333%22%20d%3D%22M287%20165.7l-12.8-12.8c-2.4-2.4-6.4-2.4-8.8%200l-117.2%20117.2c-2.4%202.4-6.4%202.4-8.8%200l-117.2-117.2c-2.4-2.4-6.4-2.4-8.8%200L5.4%20165.7c-2.4%202.4-2.4%206.4%200%208.8l138.8%20138.8c2.4%202.4%206.4%202.4%208.8%200l138.8-138.8c2.4-2.4%202.4-6.4%200-8.8z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha personalizada */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%20165.7l-12.8-12.8c-2.4-2.4-6.4-2.4-8.8%200l-117.2%20117.2c-2.4%202.4-6.4%202.4-8.8%200l-117.2-117.2c-2.4-2.4-6.4-2.4-8.8%200L5.4%20165.7c-2.4%202.4-2.4%206.4%200%208.8l138.8%20138.8c2.4%202.4%206.4%202.4%208.8%200l138.8-138.8c2.4-2.4%202.4-6.4%200-8.8z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha personalizada (color gris) */
     background-repeat: no-repeat;
-    background-position: right 10px center;
+    background-position: right 12px center; /* Posición de la flecha */
     background-size: 12px;
-    padding-right: 35px; /* Espacio para la flecha */
+    padding-right: 40px; /* Espacio para la flecha */
     cursor: pointer;
-    min-width: 180px;
+    min-width: 200px; /* Un poco más de ancho */
 }
 
 .filter-select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Sombra de foco más suave */
 }
 
-
-/* --- Sección de Tabla de Inventario --- */
+/* ==========================================================================
+   7. SECCIÓN DE TABLA DE INVENTARIO (CONTENEDOR DE LA TARJETA)
+   ========================================================================== */
 .inventory-table-section {
     background-color: var(--card-background);
-    border-radius: 8px;
-    box-shadow: var(--shadow-light);
-    padding: 20px;
+    border-radius: 10px; /* Bordes más redondeados */
+    box-shadow: var(--shadow-md); /* Sombra más pronunciada para la tarjeta */
+    padding: 25px; /* Ajuste de padding interno */
+    flex-grow: 1; /* Para que la tarjeta ocupe el espacio disponible */
+    display: flex;
+    flex-direction: column;
 }
 
 .table-controls {
@@ -203,75 +230,85 @@ body {
 
 .search-box {
     position: relative;
-    width: 250px;
+    width: 300px; /* Un poco más de ancho para la búsqueda */
 }
 
 .search-input {
     width: 100%;
-    padding: 10px 10px 10px 40px; /* Espacio a la izquierda para el ícono */
+    padding: 10px 15px 10px 45px; /* Espacio a la izquierda para el ícono */
     border: 1px solid var(--border-color);
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 0.95rem;
+    color: var(--text-color);
+    background-color: var(--background-light); /* Fondo ligeramente grisáceo */
 }
 
 .search-input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    background-color: var(--card-background); /* Fondo blanco al enfocar */
 }
 
 .search-icon {
     position: absolute;
-    left: 15px;
+    left: 18px; /* Posición del ícono */
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-light);
+    font-size: 1rem;
 }
 
 .table-responsive {
-    overflow-x: auto; /* Para tablas grandes en pantallas más pequeñas (aunque es desktop) */
+    overflow-x: auto; /* Para tablas grandes */
+    flex-grow: 1; /* Para que la tabla se estire y use todo el espacio */
 }
 
 .inventory-table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 700px; /* Ancho mínimo para la tabla si es pequeña */
 }
 
 .inventory-table th,
 .inventory-table td {
-    padding: 12px 15px;
+    padding: 14px 18px; /* Ajuste de padding de celdas */
     border-bottom: 1px solid var(--border-color);
     text-align: left;
+    vertical-align: middle; /* Alinea verticalmente el contenido */
 }
 
 .inventory-table th {
     background-color: var(--background-light); /* Fondo para cabeceras */
-    font-weight: 500;
+    font-weight: 600; /* Más peso para cabeceras */
     color: var(--text-light);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
+    letter-spacing: 0.5px; /* Espaciado entre letras */
 }
 
 .inventory-table tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.05); /* Suave hover effect para filas */
+    background-color: rgba(0, 123, 255, 0.03); /* Suave hover effect para filas */
 }
 
 /* Checkbox en la tabla */
 .inventory-table input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 18px; /* Tamaño un poco más grande */
+    height: 18px;
     accent-color: var(--primary-color); /* Color del checkbox al seleccionarlo */
+    cursor: pointer;
 }
 
 /* "Píldoras" de Estado */
 .status-pill {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
+    display: inline-flex; /* Usamos flex para centrar contenido si es necesario */
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px; /* Ajuste de padding */
+    border-radius: 50px; /* Bordes completamente redondeados */
     font-size: 0.85rem;
-    font-weight: 500;
-    text-align: center;
-    min-width: 90px;
+    font-weight: 600;
+    min-width: 100px; /* Ancho mínimo consistente */
 }
 
 .status-en-stock {
@@ -289,7 +326,7 @@ body {
     color: var(--status-sin-stock-text);
 }
 
-/* Botones de acciones en cada fila */
+/* Botones de acciones en cada fila (menú de 3 puntos) */
 .actions-menu {
     position: relative;
     display: inline-block;
@@ -301,6 +338,316 @@ body {
     font-size: 1.1rem;
     color: var(--text-light);
     cursor: pointer;
-    padding: 5px;
+    padding: 8px; /* Mayor área de click */
+    border-radius: 50%; /* Botón redondo */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: var(--border-color); /* Fondo gris claro en hover */
+    color: var(--primary-color); /* Color azul en hover */
+}
+
+/* ==========================================================================
+   8. ESTILOS PARA LA PANTALLA DE PERFIL (profile.html)
+   ========================================================================== */
+
+/* Ajuste la clase active en la barra lateral para la página de perfil */
+.sidebar-nav ul li a[href="/Proyecto/html/perfil.html"].active {
+    background-color: var(--sidebar-hover);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+/* Asegurarse de que otros no estén activos si estamos en Perfil */
+.sidebar-nav ul li a[href="index.html"]:not(.active),
+.sidebar-nav ul li a[href="dashboard.html"]:not(.active),
+.sidebar-nav ul li a[href="#"]:not(.active) { /* Para "Configuración" */
+    background-color: transparent;
+    color: var(--sidebar-text);
+    border-left-color: transparent;
+}
+
+
+.profile-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Izquierda para avatar/detalles, derecha para ajustes */
+    gap: 30px;
+    align-items: start;
+    flex-grow: 1; /* Para que la sección de perfil ocupe el espacio disponible */
+}
+
+.profile-card, .settings-card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card {
+    align-items: center;
+    text-align: center;
+}
+
+.profile-header {
+    margin-bottom: 25px;
+}
+
+.profile-avatar {
+    width: 140px; /* Tamaño de avatar un poco más grande */
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color); /* Borde más pronunciado */
+    margin-bottom: 20px;
+}
+
+.profile-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.profile-role {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+
+.profile-details {
+    width: 100%;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0; /* Ajuste de padding */
+    font-size: 1rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-icon {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    width: 25px; /* Ancho fijo para alinear íconos */
+    text-align: center;
+}
+
+/* Tarjeta de configuración */
+.settings-card h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 25px;
+}
+
+.profile-form .form-group {
+    margin-bottom: 20px;
+}
+
+.profile-form label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px; /* Ajuste de padding */
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--background-light);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    background-color: var(--card-background);
+}
+
+.save-changes-btn {
+    background-color: var(--primary-color);
+    color: var(--card-background);
     border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 20px;
+    width: auto;
+    align-self: flex-start; /* Alinea a la izquierda en flexbox */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+.save-changes-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.preferences-section {
+    margin-top: 35px; /* Más espacio */
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color);
+}
+
+.preferences-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.preference-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* Más espacio entre ítems */
+    gap: 15px;
+}
+
+.preference-item input[type="checkbox"] {
+    width: 20px; /* Tamaño más grande */
+    height: 20px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+    flex-shrink: 0; /* Evita que el checkbox se encoja */
+}
+
+.preference-item label {
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.logout-btn {
+    background-color: #dc3545; /* Rojo para cerrar sesión */
+    color: var(--card-background);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 40px; /* Más espacio superior */
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   9. ESTILOS ESPECÍFICOS PARA LA PÁGINA DE INICIO DE SESIÓN (login.html)
+   ========================================================================== */
+
+/* Como el body ya tiene display: flex, justify-content: center, align-items: center,
+   el wrapper del login se centrará automáticamente. */
+.login-wrapper {
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para el contenedor del formulario */
+    padding: 20px; /* Padding para que no se pegue a los bordes en pantallas pequeñas */
+}
+
+.login-container {
+    background-color: var(--card-background); /* Fondo blanco */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: var(--shadow-md); /* Sombra para efecto de tarjeta */
+    padding: 40px; /* Padding interno generoso */
+    text-align: center; /* Centra el contenido (logo, título) */
+    display: flex; /* Usamos flex para el contenido interno */
+    flex-direction: column; /* Apila los elementos */
+    align-items: center; /* Centra horizontalmente los ítems en la columna */
+}
+
+.login-logo {
+    max-width: 120px; /* Tamaño del logo */
+    height: auto;
+    margin-bottom: 30px; /* Espacio debajo del logo */
+}
+
+.login-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 35px; /* Espacio debajo del título */
+}
+
+.login-form {
+    width: 100%; /* El formulario ocupa todo el ancho disponible en el contenedor */
+    display: flex;
+    flex-direction: column; /* Apila los elementos del formulario */
+    gap: 20px; /* Espacio entre los grupos de input */
+}
+
+.input-group {
+    text-align: left; /* Alinea la etiqueta a la izquierda */
+}
+
+.input-group label {
+    display: block; /* La etiqueta ocupa su propia línea */
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-bottom: 8px; /* Espacio entre etiqueta y input */
+    font-weight: 500;
+}
+
+.input-group input[type="email"],
+.input-group input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--background-light); /* Fondo ligeramente gris para inputs */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    background-color: var(--card-background); /* Fondo blanco al enfocar */
+}
+
+.login-btn {
+    background-color: var(--primary-color);
+    color: var(--card-background); /* Texto blanco */
+    border: none;
+    padding: 14px 25px; /* Padding generoso para el botón */
+    border-radius: 6px;
+    font-size: 1.1rem; /* Botón un poco más grande */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 25px; /* Espacio superior para separar del último input */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+    width: 100%; /* El botón ocupa todo el ancho disponible */
+}
+
+.login-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px); /* Efecto sutil de "levantar" */
 }

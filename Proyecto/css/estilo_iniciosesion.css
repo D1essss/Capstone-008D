@@ -1,66 +1,24 @@
-/* --- Variables CSS --- */
+/* ==========================================================================
+   1. VARIABLES CSS (Reutilizadas del estilo principal)
+   ========================================================================== */
 :root {
-    --primary-color: #007bff; /* Azul vibrante para acentos */
+    --primary-color: #007bff;         /* Azul vibrante para acentos */
     --primary-hover: #0056b3;
-    --text-color: #333;
-    --text-light: #666;
-    --background-light: #f4f7fa; /* Fondo general de la app */
-    --card-background: #ffffff;
-    --border-color: #e0e0e0;
-    --sidebar-bg: #2c3e50; /* Gris oscuro/azulado para sidebar */
-    --sidebar-text: #ecf0f1; /* Texto claro para sidebar */
-    --sidebar-hover: #34495e;
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-    /* Colores para las "píldoras" de estado */
-    --status-en-stock-bg: #e6ffe6;
-    --status-en-stock-text: #28a745; /* Verde */
-    --status-bajo-stock-bg: #fff8e6;
-    --status-bajo-stock-text: #ffc107; /* Naranja/Amarillo */
-    --status-sin-stock-bg: #ffe6e6;
-    --status-sin-stock-text: #dc3545; /* Rojo */
+    --text-color: #333;               /* Texto principal oscuro */
+    --text-light: #666;               /* Texto secundario gris */
+    --background-light: #f4f7fa;      /* Fondo general de la app */
+    --card-background: #ffffff;      /* Fondo de las "tarjetas" */
+    --border-color: #e0e0e0;          /* Bordes sutiles */
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra media para el contenedor de login */
 }
 
-/* --- Reset Básico y Estilos Generales --- */
+/* ==========================================================================
+   2. RESET BÁSICO Y ESTILOS GENERALES
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-.login-container
-{
-    background-color: var(--card-background);
-    padding: 40px 32px;
-    border-radius: 10px;
-    box-shadow: var(--shadow-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 1800px; /* Ancho fijo para la aplicación de escritorio */
-    max-width: 95%; /* Asegura que no desborde en pantallas muy pequeñas */
-    height: 90vh; /* Altura para dar sensación de aplicación de escritorio */
-}
-
-.input-group input {
-    font-size: 1.2rem;
-    font-weight: 400;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    margin-bottom: 22px;
-    width: 100%;
-    margin-top: 6px;
-    color: var(--text-color);
-}
-
-.login-title
-{
-    display: block;
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--text-color);
 }
 
 body {
@@ -68,95 +26,48 @@ body {
     background-color: var(--background-light);
     color: var(--text-color);
     line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;  /*Para centrar la app en la pantalla */
+    display: flex; /* Usamos flexbox para centrar el contenido */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    min-height: 100vh; /* Ocupa al menos el 100% del alto de la ventana */
+    overflow: hidden; /* Evita scrolls inesperados */
 }
 
-.login-btn{
-    background-color: var(--primary-color);
-    color: var(--card-background); /* Texto blanco */
-    border: none;
-    padding: 12px 28px; /* Ajuste de padding para el botón */
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-top: 25px; /* Espacio superior */
-    width: auto;
-    align-self: center; /* Alinea a la izquierda en flexbox */
-    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
-}
-/* Ocultar elementos visualmente pero mantenerlos para accesibilidad */
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+/* ==========================================================================
+   3. CONTENEDOR PRINCIPAL DEL LOGIN
+   ========================================================================== */
+.login-wrapper {
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para el contenedor del formulario */
+    padding: 20px;
+    /* No es necesario background-color o shadow aquí, se aplican al login-container */
 }
 
-/* --- Contenedor Principal de la Aplicación --- */
-.app-container {
-    display: flex;
-    background-color: var(--card-background);
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Para que los bordes redondeados se vean bien */
+.login-container {
+    background-color: var(--card-background); /* Fondo blanco */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: var(--shadow-md); /* Sombra para efecto de tarjeta */
+    padding: 40px; /* Padding interno generoso */
+    text-align: center; /* Centra el contenido (logo, título) */
 }
 
-
-.icon-logo {
-    font-size: 3rem;
-    color: var(--primary-color); /* Color del logo */
-    margin-bottom: 5px;
+.login-logo {
+    max-width: 120px; /* Tamaño del logo */
+    height: auto;
+    margin-bottom: 30px; /* Espacio debajo del logo */
 }
 
-
-.nav-icon {
-    margin-right: 15px;
-    font-size: 1.1rem;
-}
-
-/* --- Contenido Principal --- */
-.main-content {
-    flex-grow: 1; /* Ocupa el espacio restante */
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto; /* Permite scroll si el contenido es muy largo */
-}
-
-/* Cabecera del Contenido Principal */
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.content-header h1 {
-    font-size: 2rem;
-    font-weight: 500;
+.login-title {
+    font-size: 2.2rem;
+    font-weight: 700;
     color: var(--text-color);
-}
-/* Botones de acciones en cada fila */
-.actions-menu {
-    position: relative;
-    display: inline-block;
+    margin-bottom: 35px; /* Espacio debajo del título */
 }
 
-.action-btn {
-    background: none;
-    border: none;
-    font-size: 1.1rem;
-    color: var(--text-light);
-    cursor: pointer;
-    padding: 5px;
-    border: none;
-}
+/* ==========================================================================
+   4. FORMULARIO DE LOGIN
+   ========================================================================== */
+.login-form {
+    display: flex;
+    flex-direction: column; /* Apila los elementos del formulario */
+    gap: 20px; /*
