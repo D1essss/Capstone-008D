@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario - Aplicación</title>
-    <link rel="stylesheet" href="/Proyecto/css/estilo_principal.css">
+    <link rel="stylesheet" href="../css/estilo_principal.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -18,11 +18,15 @@
                 <i class="fas fa-cube icon-logo"></i>
             </div>
             <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="#" class="nav-item"><i class="fas fa-chart-line nav-icon"></i> Dashboard</a></li>
-                    <li><a href="index.html" class="nav-item active"><i class="fas fa-box nav-icon"></i> Inventario</a></li> <li><a href="/Proyecto/html/perfil.html" class="nav-item"><i class="fas fa-user nav-icon"></i> Perfil</a></li> <li><a href="#" class="nav-item"><i class="fas fa-cog nav-icon"></i> Configuración</a></li>
-                </ul>
-            </nav>
+   <nav class="sidebar-nav">
+    <ul>
+        <li><a href="#" onclick="handleNav('dashboard.html', this)" class="nav-item"><i class="fas fa-chart-line nav-icon"></i> Dashboard</a></li>
+        <li><a href="#" onclick="handleNav('index.html', this)" class="nav-item"><i class="fas fa-box nav-icon"></i> Inventario</a></li> 
+        <li><a href="#" onclick="handleNav('perfil.html', this)" class="nav-item"><i class="fas fa-user nav-icon"></i> Perfil</a></li> 
+        <li><a href="#" onclick="handleNav('configuracion.html', this)" class="nav-item"><i class="fas fa-cog nav-icon"></i> Configuración</a></li>
+    </ul>
+</nav>
+</nav>
         </aside>
 
         <main class="main-content">
@@ -121,6 +125,6 @@
             </section>
         </main>
     </div>
-
+<script src="../nav-script.js"></script>
 </body>
 </html>
