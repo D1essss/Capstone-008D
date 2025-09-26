@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "electron": "^38.1.2",
     "firebase": "^12.3.0"
   }
 }
