@@ -5,6 +5,7 @@ console.log("Paso 1: renderer.js se está ejecutando...");
 // Importa las funciones que necesitas de los SDKs de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 // TODO: Asegúrate de que tu firebaseConfig está aquí y es correcto
 const firebaseConfig = {
@@ -41,3 +42,51 @@ async function verificarConexion() {
 
 // Llama a la función para que se ejecute
 verificarConexion();
+
+// Funcion de inicio de sesion
+const auth = getAuth(app); // Obtiene una referencia al servicio de autenticación
+// Se ejecuta cuando el HTML ha cargado completamente
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('loginBtn');
+
+  if (loginBtn) {
+    loginBtn.addEventListener('click', handleLogin); // Llama a la función handleLogin al hacer clic
+  }
+});
+
+
+// --- FUNCIÓN PARA MANEJAR EL INICIO DE SESIÓN ---
+// js/renderer.js
+
+// js/renderer.js
+
+async function handleLogin() {
+  const emailInput = document.getElementById('email-input');
+  const passwordInput = document.getElementById('password-input');
+  const errorMessage = document.getElementById('error-message'); // Obtenemos el párrafo de error
+
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  // Limpia cualquier mensaje de error anterior
+  errorMessage.textContent = '';
+
+  // 1. Validar campos vacíos y mostrar error en el párrafo
+  if (!email || !password) {
+    errorMessage.textContent = "Por favor, ingresa tu correo y contraseña.";
+    return; // Detiene la función
+  }
+
+  // 2. Intentar iniciar sesión
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+    console.log("✅ Inicio de sesión exitoso:", userCredential.user.uid);
+    window.electronAPI.navigate('index.html');
+
+  } catch (error) {
+    console.error("🔥 Error al iniciar sesión:", error.message);
+    // 3. Mostrar error de credenciales en el párrafo
+    errorMessage.textContent = "Correo o contraseña incorrectos.";
+  }
+}
