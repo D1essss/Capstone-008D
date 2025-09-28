@@ -7,8 +7,8 @@ const path = require('node:path');
 // Función que crea la ventana principal del navegador.
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       // Adjunta el script 'preload.js' a la ventana del navegador.
       // Este script actúa como un puente seguro.
