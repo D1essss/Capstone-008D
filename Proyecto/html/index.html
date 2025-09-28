@@ -31,7 +31,7 @@
 
         <main class="main-content">
             <header class="content-header">
-                <h1>Inventario</h1>
+                <h1>Qrden</h1>
                 <button class="add-product-btn">
                     <i class="fas fa-plus"></i> Añadir Nuevo Producto
                 </button>
@@ -65,66 +65,29 @@
                         <input type="text" placeholder="Buscar..." class="search-input">
                     </div>
                 </div>
-
-                <div class="table-responsive">
-                    <table class="inventory-table">
+                <h2>Inventario de Productos</h2>
+                    <table class="product-table">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" class="select-all-checkbox"></th>
-                                <th>Nombre del Producto</th>
-                                <th>SKU/Código</th>
-                                <th>Categoría</th>
+                                <th>Nombre</th>
                                 <th>Cantidad</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
+                                <th>Precio(CLP)</th>
+                                <th>Fecha de Ingreso</th>
+                                <th>Categoria</th>
+
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>Laptop Ultrabook X1</td>
-                                <td>LTUBX1-2023</td>
-                                <td>Electrónica</td>
-                                <td>50</td>
-                                <td><span class="status-pill status-en-stock">En Stock</span></td>
-                                <td>
-                                    <div class="actions-menu">
-                                        <button class="action-btn"><i class="fas fa-ellipsis-h"></i></button>
-                                        </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>Teclado Mecánico RGB</td>
-                                <td>TCRGB-GAMER</td>
-                                <td>Electrónica</td>
-                                <td>12</td>
-                                <td><span class="status-pill status-bajo-stock">Bajo Stock</span></td>
-                                <td>
-                                    <div class="actions-menu">
-                                        <button class="action-btn"><i class="fas fa-ellipsis-h"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>Monitor Curvo 27"</td>
-                                <td>MNCV27-2024</td>
-                                <td>Electrónica</td>
-                                <td>0</td>
-                                <td><span class="status-pill status-sin-stock">Sin Stock</span></td>
-                                <td>
-                                    <div class="actions-menu">
-                                        <button class="action-btn"><i class="fas fa-ellipsis-h"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
+                        <tbody id="product-table-body">
+                        </tbody>
                     </table>
-                </div>
+
+
+
+                
             </section>
         </main>
     </div>
 <script  src="../nav-script.js"></script>
+<script src="../renderer.js" type="module"></script>
 </body>
 </html>

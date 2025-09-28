@@ -6,6 +6,7 @@ console.log("Paso 1: renderer.js se está ejecutando...");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
 // TODO: Asegúrate de que tu firebaseConfig está aquí y es correcto
 const firebaseConfig = {
@@ -90,3 +91,51 @@ async function handleLogin() {
     errorMessage.textContent = "Correo o contraseña incorrectos.";
   }
 }
+
+
+
+
+
+// --- FUNCIÓN PARA MOSTRAR LOS PRODUCTOS ---
+// en js/renderer.js
+
+async function mostrarProductos() {
+  const tableBody = document.getElementById('product-table-body');
+  tableBody.innerHTML = ''; // Limpia la tabla antes de llenarla
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "producto"));
+    
+    querySnapshot.forEach((doc) => {
+      const producto = doc.data();
+
+      // 1. Crea una nueva fila <tr>
+      const row = document.createElement('tr');
+
+      // 2. Formatea la fecha de forma segura
+      let fechaLegible = "No disponible";
+      if (producto.fechaingreso && typeof producto.fechaingreso.toDate === 'function') {
+        fechaLegible = producto.fechaingreso.toDate().toLocaleString();
+      }
+
+      // 3. Crea una celda <td> para cada dato y añádela a la fila
+      row.innerHTML = `
+        <td>${producto.nombreproducto}</td>
+        <td>${producto.stock}</td>
+        <td>$${producto.precio}</td>
+        <td>${fechaLegible}</td>
+        <td>${producto.categoria}</td>
+      `;
+
+      // 4. Añade la fila completa al cuerpo de la tabla
+      tableBody.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error("🔥 Error al obtener los productos:", error);
+  }
+}
+
+// Llama a la función para que se ejecute
+mostrarProductos();
+

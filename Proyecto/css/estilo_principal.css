@@ -651,3 +651,32 @@ body {
     background-color: var(--primary-hover);
     transform: translateY(-1px); /* Efecto sutil de "levantar" */
 }
+/* ==========================================================================
+   CCS QUE SE USA PARA LA TABLA DE PRODUCTOS DINÁMICA
+   ========================================================================== */
+   /* Estilos para la tabla de productos */
+.product-table {
+  width: 100%;
+  border-collapse: collapse; /* Une los bordes de las celdas */
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.product-table thead {
+  background-color: #34495e; /* Un fondo oscuro para el encabezado */
+  color: #ffffff; /* Letras blancas */
+}
+
+.product-table th, .product-table td {
+  padding: 12px 15px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde sutil para cada celda */
+  text-align: left;
+}
+
+.product-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Colorea las filas pares para fácil lectura */
+}
+
+.product-table tbody tr:hover {
+  background-color: #ddd; /* Resalta la fila al pasar el mouse */
+}
