@@ -7,6 +7,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import {  createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 // TODO: Asegúrate de que tu firebaseConfig está aquí y es correcto
 const firebaseConfig = {
@@ -138,4 +140,28 @@ async function mostrarProductos() {
 
 // Llama a la función para que se ejecute
 mostrarProductos();
+
+// --- FUNCIÓN MEJORADA PARA CREAR USUARIO Y PERFIL ---
+async function crearUsuario(email, password, datosAdicionales) {
+  try {
+    // --- PASO 1: Crear el usuario en Authentication ---
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log("✅ Usuario creado en Authentication con UID:", user.uid);
+
+    // --- PASO 2: Usar el UID para crear el documento en Firestore ---
+    // La referencia al documento ahora usa el UID del usuario como su ID
+    await setDoc(doc(db, "empleados", user.uid), {
+      nombre: datosAdicionales.nombre,
+      apellido: datosAdicionales.apellido,
+      cargo: datosAdicionales.cargo,
+      email: email // Guardamos el email también para fácil acceso
+    });
+    
+    console.log("📄 Perfil de empleado creado en Firestore.");
+
+  } catch (error) {
+    console.error("🔥 Error en el registro completo:", error);
+  }
+}
 

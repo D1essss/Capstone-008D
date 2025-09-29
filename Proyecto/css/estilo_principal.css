@@ -612,7 +612,7 @@ body {
     margin-bottom: 8px; /* Espacio entre etiqueta y input */
     font-weight: 500;
 }
-
+.input-group input[type="text"],
 .input-group input[type="email"],
 .input-group input[type="password"] {
     width: 100%;
