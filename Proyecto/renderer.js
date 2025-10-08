@@ -99,39 +99,40 @@ async function handleLogin() {
 
 
 // --- FUNCIÓN PARA MOSTRAR LOS PRODUCTOS ---
-// en js/renderer.js
 
 async function mostrarProductos() {
   const tableBody = document.getElementById('product-table-body');
-  tableBody.innerHTML = ''; // Limpia la tabla antes de llenarla
+  tableBody.innerHTML = '';
 
   try {
     const querySnapshot = await getDocs(collection(db, "producto"));
     
-    querySnapshot.forEach((doc) => {
-      const producto = doc.data();
+    // Cambiamos forEach por un bucle for...of para usar await adentro
+    for (const productoDoc of querySnapshot.docs) {
+      const producto = productoDoc.data();
+      let categoriaNombre = "Sin categoría"; 
+      if (producto.categoria) {
+        const categoriaDoc = await getDoc(producto.categoria);
+        if (categoriaDoc.exists()) {
+          categoriaNombre = categoriaDoc.data().nombrecategoria;
+        }
+      }
 
-      // 1. Crea una nueva fila <tr>
       const row = document.createElement('tr');
-
-      // 2. Formatea la fecha de forma segura
       let fechaLegible = "No disponible";
       if (producto.fechaingreso && typeof producto.fechaingreso.toDate === 'function') {
         fechaLegible = producto.fechaingreso.toDate().toLocaleString();
       }
 
-      // 3. Crea una celda <td> para cada dato y añádela a la fila
       row.innerHTML = `
         <td>${producto.nombreproducto}</td>
         <td>${producto.stock}</td>
         <td>$${producto.precio}</td>
         <td>${fechaLegible}</td>
-        <td>${producto.categoria}</td>
+        <td>${categoriaNombre}</td> 
       `;
-
-      // 4. Añade la fila completa al cuerpo de la tabla
       tableBody.appendChild(row);
-    });
+    }
 
   } catch (error) {
     console.error("🔥 Error al obtener los productos:", error);
