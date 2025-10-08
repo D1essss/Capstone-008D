@@ -164,4 +164,46 @@ async function crearUsuario(email, password, datosAdicionales) {
     console.error("🔥 Error en el registro completo:", error);
   }
 }
+// en js/renderer.js
+
+// --- LÓGICA PARA EL SLIDESHOW DEL FONDO ---
+document.addEventListener('DOMContentLoaded', () => {
+  // ... (tu código existente del loginBtn va aquí adentro) ...
+  
+  const slideshow = document.getElementById('background-slideshow');
+  
+  // Lista de tus imágenes. ¡Asegúrate de que las rutas sean correctas!
+  const images = [
+    '../IMG/fondo uno.avif',
+    '../IMG/fondo2.jpeg',
+    '../IMG/fondo3.jpg'
+  ];
+
+  let currentImageIndex = 0;
+
+  // Carga todas las imágenes en el div
+  images.forEach((src, index) => {
+    const img = document.createElement('img');
+    img.src = src;
+    if (index === 0) {
+      img.classList.add('active'); // La primera imagen es visible al inicio
+    }
+    slideshow.appendChild(img);
+  });
+
+  // Cambia la imagen cada 5 segundos
+  setInterval(() => {
+    const allImages = slideshow.querySelectorAll('img');
+    
+    // Oculta la imagen actual
+    allImages[currentImageIndex].classList.remove('active');
+    
+    // Calcula el índice de la siguiente imagen
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    
+    // Muestra la siguiente imagen
+    allImages[currentImageIndex].classList.add('active');
+
+  }, 5000); // 5000 milisegundos = 5 segundos
+});
 
