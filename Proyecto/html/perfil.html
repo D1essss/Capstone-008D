@@ -11,7 +11,6 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <i class="fas fa-box-open icon-logo"></i>
-        <h3>Inventario App</h3>
       </div>
       <nav class="sidebar-nav">
         <ul>
@@ -29,35 +28,59 @@
       </div>
       
       <div class="profile-section">
-        <div class="profile-card">
-          <div class="profile-header">
-            <h2 id="user-name">Cargando...</h2>
-            <p id="user-role" class="profile-role">...</p>
-          </div>
-          <div class="profile-details">
-            <div class="detail-item">
-              <i class="fas fa-envelope detail-icon"></i>
-              <span id="user-email">...</span>
-            </div>
-            <div class="detail-item">
-              <i class="fas fa-id-card detail-icon"></i>
-              <span id="user-rut">...</span>
-            </div>
-            <div class="detail-item">
-              <i class="fas fa-phone detail-icon"></i>
-              <span id="user-phone">...</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="settings-card">
-          <h3>Ajustes de la Cuenta</h3>
-          </div>
+  <div class="profile-card expanded-profile-card"> <div class="profile-avatar-initials" id="user-initials">JP</div>
+    <div class="profile-header">
+      <h2 id="user-name">Cargando...</h2>
+      <p id="user-role" class="profile-role">...</p>
+    </div>
+    <div class="profile-details">
+      <div class="detail-item">
+        <i class="fas fa-envelope detail-icon"></i>
+        <span id="user-email">...</span>
       </div>
-    </main>
+      <div class="detail-item">
+        <i class="fas fa-id-card detail-icon"></i>
+        <span id="user-rut">...</span>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-phone detail-icon"></i>
+        <span id="user-phone">...</span>
+      </div>
+    </div>
+    
+    <div class="profile-actions">
+        <button id="changePasswordBtn" class="save-changes-btn full-width">
+            <i class="fas fa-key"></i> Cambiar Contraseña
+        </button>
+        <button id="logoutBtn" class="logout-btn full-width">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
+    </div>
+    <p id="password-message" style="margin-top: 10px; text-align: center;"></p>
   </div>
+</div>
 
-  <script src="../nav-script.js"></script>
+<div id="changePasswordModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h2>Cambiar Contraseña</h2>
+    <div class="input-group">
+      <label for="current-password-input">Contraseña Actual</label>
+      <input type="password" id="current-password-input">
+    </div>
+    <div class="input-group">
+      <label for="new-password-input">Nueva Contraseña</label>
+      <input type="password" id="new-password-input">
+    </div>
+    <div class="input-group">
+      <label for="confirm-new-password-input">Confirmar Nueva Contraseña</label>
+      <input type="password" id="confirm-new-password-input">
+    </div>
+    <button id="confirmChangePasswordBtn" class="login-btn">Confirmar Cambio</button>
+    <p id="modal-password-message" style="margin-top: 15px;"></p>
+  </div>
+</div>
+
   <script src="../perfil-renderer.js" type="module"></script>
 </body>
 </html>

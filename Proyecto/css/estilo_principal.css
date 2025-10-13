@@ -5,6 +5,7 @@
     --primary-color: #007bff;         /* Azul vibrante para acentos */
     --primary-hover: #0056b3;
     --text-color: #333;               /* Texto principal oscuro */
+     --primary-rgb: 0, 123, 255;      /* RGB para sombras y efectos */
     --text-light: #666;               /* Texto secundario gris */
     --background-light: #f4f7fa;      /* Fondo general de la app y cabeceras de tabla */
     --card-background: #ffffff;      /* Fondo de las "tarjetas" y el contenido principal */
@@ -14,6 +15,8 @@
     --sidebar-hover: #34495e;         /* Fondo hover para sidebar */
     --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra ligera */
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);   /* Sombra media para tarjetas y contenedor de login */
+    --danger-color: #dc3545;       /* Rojo para acciones peligrosas */
+    --danger-hover: #c82333; /* Un rojo más oscuro para el hover */
 
     /* Colores para las "píldoras" de estado */
     --status-en-stock-bg: #d4edda;    /* Verde claro */
@@ -569,11 +572,6 @@ body {
     max-width: 400px; /* Ancho máximo para el contenedor del formulario */
     padding: 20px; /* Padding para que no se pegue a los bordes en pantallas pequeñas */
 }
-.login-wrapper2 {
-    width: 100%;
-    max-width: 800px; /* Ancho máximo para el contenedor del formulario */
-    padding: 20px; /* Padding para que no se pegue a los bordes en pantallas pequeñas */
-}
 
 .login-container {
     background-color: var(--card-background); /* Fondo blanco */
@@ -605,22 +603,8 @@ body {
     flex-direction: column; /* Apila los elementos del formulario */
     gap: 20px; /* Espacio entre los grupos de input */
 }
-.login-form {
-  width: 100%;
-  display: grid; /* 1. Activa el modo de rejilla */
-  grid-template-columns: 1fr 1fr; /* 2. Crea dos columnas de igual tamaño */
-  gap: 20px 30px; /* 3. Espacio vertical y horizontal entre campos */
-}
-
-/* Regla para los elementos que deben ocupar todo el ancho */
-.full-width {
-  grid-column: 1 / -1; /* 4. Hace que el elemento ocupe desde la primera a la última columna */
-}
 
 
-.input-group {
-    text-align: left; /* Alinea la etiqueta a la izquierda */
-}
 
 .input-group label {
     display: block; /* La etiqueta ocupa su propia línea */
@@ -740,4 +724,233 @@ body {
 
 .product-table tbody tr:hover {
   background-color: #ddd; /* Resalta la fila al pasar el mouse */
+}
+
+/* ==========================================================================
+   11. ESTILOS ADICIONALES PARA LA PÁGINA DE PERFIL MEJORADA
+   ========================================================================== */
+
+/* Haz que la sección de perfil sea una sola columna más ancha */
+.profile-section {
+    display: flex; /* Usamos flexbox para centrar la tarjeta */
+    justify-content: center; /* Centra horizontalmente */
+    width: 100%;
+}
+
+/* Estilos para la tarjeta de perfil más ancha y con los botones */
+.expanded-profile-card {
+    max-width: 650px; /* Nuevo ancho máximo para la tarjeta */
+    width: 100%;
+    padding: 40px; /* Más padding para un look más espacioso */
+    text-align: center; /* Centra el texto */
+    display: flex; /* Usa flex para la disposición interna */
+    flex-direction: column; /* Organiza los elementos en columna */
+    align-items: center; /* Centra los elementos */
+}
+
+.profile-avatar-initials {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--card-background);
+    font-size: 3rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-light);
+}
+
+.profile-header h2 {
+    margin-bottom: 5px;
+    font-size: 2.2rem;
+}
+
+.profile-header .profile-role {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+
+.profile-details {
+    width: 100%; /* Ocupa todo el ancho dentro de la tarjeta */
+    margin-bottom: 30px; /* Espacio antes de los botones */
+    text-align: left; /* Alinea los detalles a la izquierda */
+    border-top: 1px solid var(--border-color); /* Separador visual */
+    padding-top: 25px;
+}
+
+.profile-details .detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.profile-details .detail-icon {
+    color: var(--primary-color);
+    margin-right: 15px;
+    font-size: 1.2rem;
+    width: 25px; /* Ancho fijo para alinear íconos */
+    text-align: center;
+}
+
+/* Estilos para la nueva sección de botones */
+/* Estilos para la nueva sección de botones */
+.profile-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 25px;
+}
+
+.profile-actions button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    /* Aseguramos un color de texto visible por defecto */
+    color: white; /* <<--- ¡IMPORTANTE! Asegura que el texto sea blanco */
+    border: none; /* Aseguramos que no tenga borde si no lo queremos */
+}
+
+#changePasswordBtn {
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(var(--primary-rgb), 0.2);
+}
+
+#changePasswordBtn:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 6px 12px rgba(var(--primary-rgb), 0.3);
+}
+
+/* --- ¡ESTO ES LO CLAVE PARA EL BOTÓN DE CERRAR SESIÓN! --- */
+#logoutBtn {
+    background-color: var(--danger-color); /* Fondo rojo distintivo */
+    color: white; /* Texto blanco para contrastar con el fondo rojo */
+    border: none; /* Sin borde */
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2); /* Sombra suave */
+}
+
+#logoutBtn:hover {
+    background-color: var(--danger-hover); /* Tono más oscuro al pasar el ratón */
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Para el mensaje de contraseña global en la tarjeta de perfil */
+#password-message {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+}
+/* ==========================================================================
+   12. ESTILOS PARA EL MODAL DE CAMBIO DE CONTRASEÑA
+   ========================================================================== */
+
+.modal {
+  display: none; /* ¡CORRECCIÓN! Oculto por defecto */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--card-background);
+  margin: auto; /* Para centrar si no usamos flex */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-strong);
+  width: 90%; /* Ancho responsivo */
+  max-width: 500px; /* Ancho máximo */
+  position: relative;
+  animation: modalOpen 0.3s ease-out; /* Animación de apertura */
+}
+
+@keyframes modalOpen {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h2 {
+  color: var(--text-color);
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.modal .input-group {
+  margin-bottom: 20px;
+}
+
+.modal .input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.modal .input-group input[type="password"] {
+  width: calc(100% - 20px); /* Ajusta el ancho para el padding */
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--background-light);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal .input-group input[type="password"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+  outline: none;
+}
+
+.modal .login-btn { /* Reutilizamos el estilo del botón de login */
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal .close-button {
+  color: var(--text-light);
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.modal .close-button:hover,
+.modal .close-button:focus {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Para el mensaje de error/éxito dentro del modal */
+#modal-password-message {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-light);
 }

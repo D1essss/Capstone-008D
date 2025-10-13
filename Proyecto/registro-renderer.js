@@ -73,7 +73,7 @@ async function handleRegister() {
     
     messageEl.textContent = "¡Empleado registrado con éxito!";
     messageEl.style.color = 'green';
-    document.querySelector('.login-form2').reset();
+    document.querySelector('.login-form').reset();
 
   } catch (error) {
     console.error("🔥 Error en el registro:", error);
