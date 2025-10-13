@@ -36,33 +36,45 @@
             </header>
 
 
-            <section class="inventory-table-section">
-                <div class="table-controls">
-                    <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" placeholder="Buscar..." class="search-input">
-                    </div>
-                </div>
-                <h2>Inventario de Productos</h2>
-                    <table class="product-table">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Cantidad</th>
-                                <th>Precio(CLP)</th>
-                                <th>Fecha de Ingreso</th>
-                                <th>Categoria</th>
+          <div class="tabs-container">
+  <button class="tab-button is-active" data-tab="inventario">Inventario</button>
+  <button class="tab-button" data-tab="historial">Historial de Movimientos</button>
+</div>
 
-                            </tr>
-                        </thead>
-                        <tbody id="product-table-body">
-                        </tbody>
-                    </table>
+<div class="tab-content-container">
+  <div id="inventario" class="tab-content is-active">
+    <h2>Inventario de Productos</h2>
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Stock</th>
+          <th>Precio</th>
+          <th>Fecha de Ingreso</th>
+          <th>Categoría</th>
+        </tr>
+      </thead>
+      <tbody id="product-table-body">
+        </tbody>
+    </table>
+  </div>
 
-
-
-                
-            </section>
+  <div id="historial" class="tab-content">
+    <h2>Historial de Movimientos</h2>
+    <table class="product-table"> <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Responsable</th>
+          <th>Tipo</th>
+          <th>Lote</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody id="registro-table-body">
+        </tbody>
+    </table>
+  </div>
+</div>
         </main>
     </div>
 <script  src="../nav-script.js"></script>

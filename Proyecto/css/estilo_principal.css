@@ -17,6 +17,7 @@
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);   /* Sombra media para tarjetas y contenedor de login */
     --danger-color: #dc3545;       /* Rojo para acciones peligrosas */
     --danger-hover: #c82333; /* Un rojo más oscuro para el hover */
+    --login-container-width: 950px; /* Ancho del contenedor de login */
 
     /* Colores para las "píldoras" de estado */
     --status-en-stock-bg: #d4edda;    /* Verde claro */
@@ -50,6 +51,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--background-light);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Permite scroll si el contenido es largo */
 }
 
 /* Ocultar elementos visualmente pero mantenerlos para accesibilidad */
@@ -953,4 +966,142 @@ body {
     text-align: center;
     font-size: 0.9rem;
     color: var(--text-light);
+}
+/* ==========================================================================
+   13. DISEÑO EXCLUSIVO PARA LA PÁGINA DE REGISTRO
+   ========================================================================== */
+
+/* Aseguramos que el body de la página de registro centre el contenido */
+.registration-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* La tarjeta principal que contiene todo el formulario */
+.registration-card {
+  max-width: 900px;  /* <<< El ancho que buscamos */
+  width: 100%;
+  padding: 40px 50px; /* Padding vertical y horizontal */
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+.registration-title {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* El "plano" de nuestro formulario: una cuadrícula (grid) */
+.registration-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+  gap: 25px 40px; /* Espacio vertical y horizontal entre los campos */
+  width: 100%;
+}
+
+/* Clase para elementos que deben ocupar todo el ancho (las 2 columnas) */
+.grid-full-width {
+  grid-column: 1 / -1;
+}
+
+.registration-form-grid .form-section-title {
+  font-size: 1.4rem;
+  color: var(--primary-color);
+  text-align: left;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.registration-form-grid .input-group {
+  text-align: left;
+}
+
+.registration-form-grid .input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.registration-form-grid .input-group input,
+.registration-form-grid .input-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--background-light);
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.registration-form-grid .input-group input:focus,
+.registration-form-grid .input-group select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+  outline: none;
+}
+
+.registration-form-grid .login-btn {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 1.1rem;
+}
+
+.registration-form-grid .back-link {
+  text-align: center;
+  margin-top: 10px;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+/* ==========================================================================
+   14. ESTILOS PARA EL SISTEMA DE PESTAÑAS (TABS)
+   ========================================================================== */
+
+.tabs-container {
+  display: flex;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 25px;
+}
+
+.tab-button {
+  padding: 15px 25px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab-button:hover {
+  color: var(--primary-color);
+}
+
+/* Estilo para la pestaña activa */
+.tab-button.is-active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Ocultamos todo el contenido de las pestañas por defecto */
+.tab-content {
+  display: none;
+}
+
+/* Mostramos solo el contenido de la pestaña activa */
+.tab-content.is-active {
+  display: block;
 }

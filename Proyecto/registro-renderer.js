@@ -1,8 +1,9 @@
 // js/registro-renderer.js
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, collection, getDocs , query, where} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBe_hG10cUc44ISvAEzDRl8kzDneC8JTfk",
@@ -47,39 +48,94 @@ async function cargarCargosDropdown() {
 async function handleRegister() {
   const nombre = document.getElementById('nombre-input').value;
   const apellido = document.getElementById('apellido-input').value;
-  const rut = document.getElementById('rut-input').value;
+  const rut = document.getElementById('rut-input').value; // Usaremos este valor
   const cargoId = document.getElementById('cargo-select').value;
   const email = document.getElementById('email-input').value;
   const password = document.getElementById('password-input').value;
+  const telefono = document.getElementById('telefono-input').value;
   const messageEl = document.getElementById('message');
 
-  if (!nombre || !apellido || !rut || !cargoId || !email || !password) {
+  // Limpia el mensaje de error anterior
+  messageEl.textContent = '';
+
+  // --- PASO 1: Validación de campos vacíos (sin cambios) ---
+  if (!nombre || !apellido || !rut || !cargoId || !email || !password || !telefono) {
     messageEl.textContent = "Error: Todos los campos son obligatorios.";
     messageEl.style.color = 'red';
     return;
   }
 
+  // --- PASO 2: Nueva validación de formato y dígito verificador del RUT ---
+  if (!validarRut(rut)) {
+    messageEl.textContent = "Error: El RUT ingresado no es válido.";
+    messageEl.style.color = 'red';
+    return; // Detiene la ejecución si el RUT es inválido
+  }
+
+  // --- PASO 3: Nueva validación de RUT duplicado en Firestore ---
   try {
+    const empleadosRef = collection(db, "empleados");
+    const q = query(empleadosRef, where("rut", "==", rut));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      messageEl.textContent = "Error: El RUT ingresado ya está registrado en la base de datos.";
+      messageEl.style.color = 'red';
+      return; // Detiene la ejecución si el RUT ya existe
+    }
+
+    // --- Si todas las validaciones pasan, procedemos a registrar ---
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    
     const cargoRef = doc(db, "cargo", cargoId);
+    const datosEmpleado = { nombre, apellido, rut, cargo: cargoRef, email,telefono };
 
-    
-    const datosEmpleado = { nombre, apellido, rut, cargo: cargoRef, email };
-    
     await setDoc(doc(db, "empleados", user.uid), datosEmpleado);
-    
-    messageEl.textContent = "¡Empleado registrado con éxito!";
+
+    messageEl.textContent = "✅ ¡Empleado registrado con éxito!";
     messageEl.style.color = 'green';
-    document.querySelector('.login-form').reset();
+
+    document.querySelector('.registration-form-grid').reset();
 
   } catch (error) {
     console.error("🔥 Error en el registro:", error);
     messageEl.textContent = "Error: " + error.message;
     messageEl.style.color = 'red';
   }
+}
+// --- FUNCIÓN PARA VALIDAR RUT CHILENO (ALGORITMO MÓDULO 11) ---
+function validarRut(rutCompleto) {
+  if (!/^[0-9]+-[0-9kK]{1}$/.test(rutCompleto)) return false;
+  
+  const tmp = rutCompleto.split('-');
+  let dv = tmp[1].toUpperCase();
+  let cuerpo = tmp[0];
+  
+  let suma = 0;
+  let multiplo = 2;
+  
+  // Recorrer el cuerpo del RUT de derecha a izquierda
+  for (let i = cuerpo.length - 1; i >= 0; i--) {
+    suma += multiplo * cuerpo.charAt(i);
+    if (multiplo < 7) {
+      multiplo++;
+    } else {
+      multiplo = 2;
+    }
+  }
+  
+  const dvEsperado = 11 - (suma % 11);
+  
+  if (dvEsperado == 10) {
+    dv = 'K';
+  } else if (dvEsperado == 11) {
+    dv = '0';
+  } else {
+    dv = dvEsperado.toString();
+  }
+  
+  return dv == tmp[1].toUpperCase();
 }
 // --- LÓGICA PARA EL SLIDESHOW DEL FONDO ---
 document.addEventListener('DOMContentLoaded', () => {

@@ -46,53 +46,6 @@ async function verificarConexion() {
 // Llama a la función para que se ejecute
 verificarConexion();
 
-// Funcion de inicio de sesion
-const auth = getAuth(app); // Obtiene una referencia al servicio de autenticación
-// Se ejecuta cuando el HTML ha cargado completamente
-document.addEventListener('DOMContentLoaded', () => {
-  const loginBtn = document.getElementById('loginBtn');
-
-  if (loginBtn) {
-    loginBtn.addEventListener('click', handleLogin); // Llama a la función handleLogin al hacer clic
-  }
-});
-
-
-// --- FUNCIÓN PARA MANEJAR EL INICIO DE SESIÓN ---
-
-
-async function handleLogin() {
-  const emailInput = document.getElementById('email-input');
-  const passwordInput = document.getElementById('password-input');
-  const errorMessage = document.getElementById('error-message'); // Obtenemos el párrafo de error
-
-  const email = emailInput.value;
-  const password = passwordInput.value;
-
-  // Limpia cualquier mensaje de error anterior
-  errorMessage.textContent = '';
-
-  // 1. Validar campos vacíos y mostrar error en el párrafo
-  if (!email || !password) {
-    errorMessage.textContent = "Por favor, ingresa tu correo y contraseña.";
-    return; // Detiene la función
-  }
-
-  // 2. Intentar iniciar sesión
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    sessionStorage.setItem('loggedInUserUid', user.uid);
-    console.log("✅ Inicio de sesión exitoso:", userCredential.user.uid);
-    window.electronAPI.navigate('index.html');
-
-  } catch (error) {
-    console.error("🔥 Error al iniciar sesión:", error.message);
-    // 3. Mostrar error de credenciales en el párrafo
-    errorMessage.textContent = "Correo o contraseña incorrectos.";
-  }
-}
-
 
 
 
@@ -140,6 +93,86 @@ async function mostrarProductos() {
 
 // Llama a la función para que se ejecute
 mostrarProductos();
+
+// --- NUEVA FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS ---
+async function mostrarRegistros() {
+  const tableBody = document.getElementById('registro-table-body');
+  tableBody.innerHTML = '';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "registro")); // Cambiado a 'registro'
+
+    for (const registroDoc of querySnapshot.docs) {
+      const registro = registroDoc.data();
+      
+      // Variables para guardar los nombres de las referencias
+      let nombreProducto = "Producto no encontrado";
+      let nombreResponsable = "Responsable no encontrado";
+      
+      // 1. Obtener el nombre del producto desde la referencia
+      if (registro.codigo) { // Asumiendo que 'codigo' es la referencia al producto
+        const productoDoc = await getDoc(registro.codigo);
+        if (productoDoc.exists()) {
+          nombreProducto = productoDoc.data().nombreproducto;
+        }
+      }
+
+      // 2. Obtener el nombre del responsable desde la referencia
+      if (registro.responsable) {
+        const responsableDoc = await getDoc(registro.responsable);
+        if (responsableDoc.exists()) {
+          const respData = responsableDoc.data();
+          nombreResponsable = `${respData.nombre} ${respData.apellido}`;
+        }
+      }
+
+      const row = document.createElement('tr');
+      // Usamos fsalidabodega como la fecha principal del movimiento
+      let fechaSalida = "No disponible";
+      if (registro.fsalidabodega && typeof registro.fsalidabodega.toDate === 'function') {
+          fechaSalida = registro.fsalidabodega.toDate().toLocaleString();
+      }
+
+      row.innerHTML = `
+        <td>${nombreProducto}</td>
+        <td>${nombreResponsable}</td>
+        <td>Salida</td> <td>${registro.lote || 'N/A'}</td> <td>${fechaSalida}</td>
+      `;
+      tableBody.appendChild(row);
+    }
+  } catch (error) {
+    console.error("🔥 Error al obtener los registros:", error);
+  }
+}
+
+
+// --- LÓGICA PARA MANEJAR LAS PESTAÑAS ---
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = document.querySelector("#" + tab.dataset.tab);
+
+      // Ocultar todo el contenido
+      tabContents.forEach(content => {
+        content.classList.remove('is-active');
+      });
+      // Quitar la clase activa de todos los botones
+      tabs.forEach(t => {
+        t.classList.remove('is-active');
+      });
+
+      // Mostrar el contenido y marcar el botón como activo
+      target.classList.add('is-active');
+      tab.classList.add('is-active');
+    });
+  });
+
+  // Cargar los datos de ambas tablas al iniciar la página
+  mostrarRegistros();
+});
 
 // --- FUNCIÓN MEJORADA PARA CREAR USUARIO Y PERFIL ---
 async function crearUsuario(email, password, datosAdicionales) {
