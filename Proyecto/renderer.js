@@ -59,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // --- FUNCIÓN PARA MANEJAR EL INICIO DE SESIÓN ---
-// js/renderer.js
 
-// js/renderer.js
 
 async function handleLogin() {
   const emailInput = document.getElementById('email-input');
@@ -83,7 +81,8 @@ async function handleLogin() {
   // 2. Intentar iniciar sesión
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    
+    const user = userCredential.user;
+    sessionStorage.setItem('loggedInUserUid', user.uid);
     console.log("✅ Inicio de sesión exitoso:", userCredential.user.uid);
     window.electronAPI.navigate('index.html');
 

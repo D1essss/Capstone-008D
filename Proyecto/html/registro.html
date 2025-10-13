@@ -6,47 +6,55 @@
   <link rel="stylesheet" href="../css/estilo_principal.css">
 </head>
 <body>
+  <div id="background-slideshow">
+    </div>
   
-  <div class="login-wrapper">
+  <div class="login-wrapper2">
     <div class="login-container">
       
       <h2 class="login-title">Registrar Encargado</h2>
       
-      <div class="login-form">
-        <div class="input-group">
-          <label for="nombre-input">Nombre</label>
-          <input type="text" id="nombre-input">
-        </div>
-        
-        <div class="input-group">
-          <label for="apellido-input">Apellido</label>
-          <input type="text" id="apellido-input">
-        </div>
-        
-        <div class="input-group">
-          <label for="cargo-input">Cargo</label>
-          <input type="text" id="cargo-input">
-        </div>
-        
-        <div class="input-group">
-          <label for="email-input">Correo Electrónico</label>
-          <input type="email" id="email-input">
-        </div>
+      <form class="login-form2">
+  <div class="input-group">
+    <label for="nombre-input">Nombre</label>
+    <input type="text" id="nombre-input">
+  </div>
+  
+  <div class="input-group">
+    <label for="apellido-input">Apellido</label>
+    <input type="text" id="apellido-input">
+  </div>
+  
+  <div class="input-group">
+    <label for="rut-input">RUT</label>
+    <input type="text" id="rut-input">
+  </div>
+  
+  <div class="input-group">
+    <label for="cargo-select">Cargo</label>
+    <select id="cargo-select" class="filter-select">
+      <option value="" disabled selected>Selecciona un cargo...</option>
+    </select>
+  </div>
+  
+  <div class="input-group">
+    <label for="email-input">Correo Electrónico</label>
+    <input type="email" id="email-input">
+  </div>
 
-        <div class="input-group">
-          <label for="password-input">Contraseña</label>
-          <input type="password" id="password-input">
-        </div>
-        
-        <button id="registerBtn" type="button" class="login-btn">Registrar</button>
-        
-        <p id="message" style="color: green; margin-top: 15px;"></p>
-        
-        <a href="#" onclick="window.electronAPI.navigate('index.html')" style="margin-top: 15px;">Volver al Inventario</a>
-      </div>
+  <div class="input-group">
+    <label for="password-input">Contraseña</label>
+    <input type="password" id="password-input">
+  </div>
+  
+  <button id="registerBtn" type="button" class="login-btn full-width">Registrar</button>
+  <p id="message" class="full-width" style="color: green; margin-top: 15px;"></p>
+  <a href="#" onclick="window.electronAPI.navigate('index.html')" class="full-width" style="margin-top: 15px; text-align: center;">Volver al Inventario</a>
+</form>
 
     </div>
-  </div>
+  
+  
 
   <script src="../registro-renderer.js" type="module"></script>
 </body>

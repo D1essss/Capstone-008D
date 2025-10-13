@@ -569,6 +569,11 @@ body {
     max-width: 400px; /* Ancho máximo para el contenedor del formulario */
     padding: 20px; /* Padding para que no se pegue a los bordes en pantallas pequeñas */
 }
+.login-wrapper2 {
+    width: 100%;
+    max-width: 800px; /* Ancho máximo para el contenedor del formulario */
+    padding: 20px; /* Padding para que no se pegue a los bordes en pantallas pequeñas */
+}
 
 .login-container {
     background-color: var(--card-background); /* Fondo blanco */
@@ -600,6 +605,18 @@ body {
     flex-direction: column; /* Apila los elementos del formulario */
     gap: 20px; /* Espacio entre los grupos de input */
 }
+.login-form {
+  width: 100%;
+  display: grid; /* 1. Activa el modo de rejilla */
+  grid-template-columns: 1fr 1fr; /* 2. Crea dos columnas de igual tamaño */
+  gap: 20px 30px; /* 3. Espacio vertical y horizontal entre campos */
+}
+
+/* Regla para los elementos que deben ocupar todo el ancho */
+.full-width {
+  grid-column: 1 / -1; /* 4. Hace que el elemento ocupe desde la primera a la última columna */
+}
+
 
 .input-group {
     text-align: left; /* Alinea la etiqueta a la izquierda */
