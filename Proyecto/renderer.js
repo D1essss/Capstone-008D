@@ -145,6 +145,55 @@ async function mostrarRegistros() {
   }
 }
 
+// Funcion de inicio de sesion
+const auth = getAuth(app); // Obtiene una referencia al servicio de autenticación
+// Se ejecuta cuando el HTML ha cargado completamente
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('loginBtn');
+
+  if (loginBtn) {
+    loginBtn.addEventListener('click', handleLogin); // Llama a la función handleLogin al hacer clic
+  }
+});
+
+
+// --- FUNCIÓN PARA MANEJAR EL INICIO DE SESIÓN ---
+
+
+async function handleLogin() {
+  const emailInput = document.getElementById('email-input');
+  const passwordInput = document.getElementById('password-input');
+  const errorMessage = document.getElementById('error-message'); // Obtenemos el párrafo de error
+
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  // Limpia cualquier mensaje de error anterior
+  errorMessage.textContent = '';
+
+  // 1. Validar campos vacíos y mostrar error en el párrafo
+  if (!email || !password) {
+    errorMessage.textContent = "Por favor, ingresa tu correo y contraseña.";
+    return; // Detiene la función
+  }
+
+  // 2. Intentar iniciar sesión
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    sessionStorage.setItem('loggedInUserUid', user.uid);
+    console.log("✅ Inicio de sesión exitoso:", userCredential.user.uid);
+    window.electronAPI.navigate('index.html');
+
+  } catch (error) {
+    console.error("🔥 Error al iniciar sesión:", error.message);
+    // 3. Mostrar error de credenciales en el párrafo
+    errorMessage.textContent = "Correo o contraseña incorrectos.";
+  }
+}
+
+
+
 
 // --- LÓGICA PARA MANEJAR LAS PESTAÑAS ---
 document.addEventListener('DOMContentLoaded', () => {
