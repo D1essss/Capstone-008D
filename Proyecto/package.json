@@ -10,9 +10,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "firebase": "^12.3.0"
+    "firebase": "^12.4.0"
   },
   "devDependencies": {
-    "electron": "^38.2.0"
+    "electron": "^38.2.2"
   }
 }
