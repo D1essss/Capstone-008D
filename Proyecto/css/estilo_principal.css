@@ -1105,3 +1105,28 @@ body {
 .tab-content.is-active {
   display: block;
 }
+/* ==========================================================================
+   15. ESTILOS PARA LA PÁGINA DE CONFIGURACIÓN (settings.html)
+   ========================================================================== */
+   #buscador {
+      padding: 10px 15px; /* Espacio interno para que el texto no se pegue a los bordes */
+      border: 1px solid #ccc; /* Borde sutil de color gris claro */
+      border-radius: 25px; /* Bordes completamente redondeados */
+      width: 100%; /* Ocupa todo el ancho disponible */
+      font-size: 16px; /* Tamaño de letra legible */
+      
+      /* La sombra inicial, suave y difusa */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      
+      /* Transición suave para todos los cambios */
+      transition: all 0.3s ease; 
+    }
+
+    /* Estilo cuando el usuario hace clic en el buscador */
+    #buscador:focus {
+      outline: none; /* Elimina el borde azul que ponen los navegadores por defecto */
+      border-color: #311ca8; /* Cambia el color del borde a un morado elegante */
+      
+      /* La sombra se hace más grande y pronunciada */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }

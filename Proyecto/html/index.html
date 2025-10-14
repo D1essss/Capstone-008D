@@ -35,6 +35,8 @@
                 <button  class="add-product-btn" onclick="window.electronAPI.navigate('registro.html')">Registrar Nuevo Encargado</button>
             </header>
 
+            
+
 
           <div class="tabs-container">
   <button class="tab-button is-active" data-tab="inventario">Inventario</button>
@@ -44,6 +46,12 @@
 <div class="tab-content-container">
   <div id="inventario" class="tab-content is-active">
     <h2>Inventario de Productos</h2>
+    <div class="container mt-4 mb-4">
+  <input type="text" id="buscador" class="form-control" placeholder="Buscar producto por nombre...">
+</div>
+
+<div class="container" id="lista-productos">
+  </div>
     <table class="product-table">
       <thead>
         <tr>

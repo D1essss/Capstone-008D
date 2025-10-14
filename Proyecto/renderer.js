@@ -59,14 +59,22 @@ async function mostrarProductos() {
   try {
     const querySnapshot = await getDocs(collection(db, "producto"));
     
-    // Cambiamos forEach por un bucle for...of para usar await adentro
     for (const productoDoc of querySnapshot.docs) {
       const producto = productoDoc.data();
       let categoriaNombre = "Sin categoría"; 
+
+      // Comprueba si el producto tiene una referencia de categoría
       if (producto.categoria) {
+        
+        // --- AQUÍ ESTÁ LA CORRECCIÓN ---
+        // Como 'producto.categoria' ya es la referencia, la usamos directamente.
         const categoriaDoc = await getDoc(producto.categoria);
+        // -----------------------------
+
         if (categoriaDoc.exists()) {
           categoriaNombre = categoriaDoc.data().nombrecategoria;
+        } else {
+          categoriaNombre = "Categoría no encontrada";
         }
       }
 
@@ -76,8 +84,11 @@ async function mostrarProductos() {
         fechaLegible = producto.fechaingreso.toDate().toLocaleString();
       }
 
+      // Agregamos una clase a la fila para poder identificarla en la búsqueda
+      row.classList.add('fila-producto');
+
       row.innerHTML = `
-        <td>${producto.nombreproducto}</td>
+        <td class="nombre-producto">${producto.nombreproducto}</td>
         <td>${producto.stock}</td>
         <td>$${producto.precio}</td>
         <td>${fechaLegible}</td>
@@ -90,7 +101,6 @@ async function mostrarProductos() {
     console.error("🔥 Error al obtener los productos:", error);
   }
 }
-
 // Llama a la función para que se ejecute
 mostrarProductos();
 
@@ -289,3 +299,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 5000); // 5000 milisegundos = 5 segundos
 });
 
+// js/renderer.js - BUSCADOR
+
+document.getElementById("buscador").addEventListener("keyup", function() {
+  let textoBusqueda = this.value.toLowerCase();
+  
+  // Ahora buscamos por las filas de la tabla
+  let filas = document.querySelectorAll(".fila-producto"); 
+
+  filas.forEach(function(fila) {
+    // Obtenemos el texto del nombre del producto en esa fila
+    let nombreProducto = fila.querySelector(".nombre-producto").textContent.toLowerCase();
+
+    if (nombreProducto.includes(textoBusqueda)) {
+      fila.style.display = ""; // Muestra la fila
+    } else {
+      fila.style.display = "none"; // Oculta la fila
+    }
+  });
+});
