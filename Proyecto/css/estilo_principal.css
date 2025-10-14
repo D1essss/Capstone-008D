@@ -1130,3 +1130,69 @@ body {
       /* La sombra se hace más grande y pronunciada */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
+    /* ==========================================================================
+   15. ESTILOS PARA FILTROS DE INVENTARIO
+   ========================================================================== */
+
+.filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espacio entre elementos del filtro */
+  margin-bottom: 25px; /* Espacio debajo de los controles */
+  padding: 15px 20px;
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+}
+
+.filter-controls label {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: var(--background-light);
+  color: var(--text-color);
+  min-width: 180px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+  outline: none;
+}
+
+.filter-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(var(--primary-rgb), 0.2);
+}
+
+.filter-button:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 8px rgba(var(--primary-rgb), 0.3);
+}
+
+.secondary-filter-button {
+    background-color: var(--text-light); /* Un color más neutro para "Limpiar" */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.secondary-filter-button:hover {
+    background-color: #5a6268;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

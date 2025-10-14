@@ -49,9 +49,18 @@
     <div class="container mt-4 mb-4">
   <input type="text" id="buscador" class="form-control" placeholder="Buscar producto por nombre...">
 </div>
+<div class="filter-controls">
+  <label for="category-filter">Filtrar por Categoría:</label>
+  <select id="category-filter" class="filter-select">
+    <option value="all" selected>Todas las categorías</option>
+    </select>
+  <button id="apply-filter-btn" class="filter-button">Aplicar Filtro</button>
+  <button id="clear-filter-btn" class="filter-button secondary-filter-button">Limpiar Filtro</button>
+</div>
 
 <div class="container" id="lista-productos">
   </div>
+  
     <table class="product-table">
       <thead>
         <tr>

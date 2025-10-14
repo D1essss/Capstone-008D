@@ -4,7 +4,7 @@ console.log("Paso 1: renderer.js se está ejecutando...");
 
 // Importa las funciones que necesitas de los SDKs de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc,query,where } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
@@ -51,109 +51,203 @@ verificarConexion();
 
 
 // --- FUNCIÓN PARA MOSTRAR LOS PRODUCTOS ---
-
-async function mostrarProductos() {
-  const tableBody = document.getElementById('product-table-body');
-  tableBody.innerHTML = '';
+let allProducts = []; // Para guardar todos los productos de Firestore
+let filteredProducts = []; // Para guardar los productos después de aplicar el filtro de categoría
+// --- FUNCIÓN PARA CARGAR LAS CATEGORÍAS EN EL FILTRO SELECT (Sin cambios) ---
+async function cargarCategoriasEnFiltro() {
+  const categoryFilter = document.getElementById('category-filter');
+  categoryFilter.innerHTML = '<option value="all" selected>Todas las categorías</option>'; 
 
   try {
-    const querySnapshot = await getDocs(collection(db, "producto"));
-    
-    for (const productoDoc of querySnapshot.docs) {
-      const producto = productoDoc.data();
-      let categoriaNombre = "Sin categoría"; 
+    const categoriasSnapshot = await getDocs(collection(db, "categoria"));
+    categoriasSnapshot.forEach(doc => {
+      const categoria = doc.data();
+      const option = document.createElement('option');
+      option.value = doc.id; 
+      option.textContent = categoria.nombrecategoria;
+      categoryFilter.appendChild(option);
+    });
+  } catch (error) {
+    console.error("🔥 Error al cargar categorías en el filtro:", error);
+  }
+}
+// --- FUNCIÓN CENTRAL PARA CARGAR DATOS DE PRODUCTOS DESDE FIRESTORE ---
+async function fetchProductsFromFirestore() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "producto"));
+        allProducts = []; // Limpiamos el array antes de rellenar
 
-      // Comprueba si el producto tiene una referencia de categoría
-      if (producto.categoria) {
+        for (const productoDoc of querySnapshot.docs) {
+            const producto = productoDoc.data();
+            producto.id = productoDoc.id; // Guarda el ID del documento
+            let categoriaNombre = "Sin categoría";
+
+            if (producto.categoria) {
+                const categoriaDoc = await getDoc(producto.categoria);
+                if (categoriaDoc.exists()) {
+                    categoriaNombre = categoriaDoc.data().nombrecategoria;
+                } else {
+                    categoriaNombre = "Categoría no encontrada";
+                }
+            }
+            producto.categoriaNombre = categoriaNombre; // Añade el nombre de la categoría al objeto producto
+            allProducts.push(producto);
+        }
+        applyCategoryFilterAndRender(); // Al cargar todos, aplica el filtro inicial y renderiza
+    } catch (error) {
+        console.error("🔥 Error al obtener los productos desde Firestore:", error);
+    }
+}
+// --- FUNCIÓN PARA APLICAR FILTRO DE CATEGORÍA Y BUSQUEDA Y RENDERIZAR LA TABLA ---
+function applyCategoryFilterAndRender() {
+    const categoryFilter = document.getElementById('category-filter');
+    const selectedCategoryId = categoryFilter ? categoryFilter.value : 'all';
+    const searchTerm = document.getElementById('buscador') ? document.getElementById('buscador').value.toLowerCase() : '';
+
+    filteredProducts = allProducts.filter(producto => {
+        // --- CAMBIO CLAVE AQUÍ ---
+        // Accedemos a producto.categoria.id de forma segura si producto.categoria existe
+        const productoCategoriaId = producto.categoria ? producto.categoria.id : null; 
         
-        // --- AQUÍ ESTÁ LA CORRECCIÓN ---
-        // Como 'producto.categoria' ya es la referencia, la usamos directamente.
-        const categoriaDoc = await getDoc(producto.categoria);
-        // -----------------------------
+        const matchesCategory = (selectedCategoryId === 'all' || (productoCategoriaId === selectedCategoryId));
+        const matchesSearch = producto.nombreproducto.toLowerCase().includes(searchTerm);
+        return matchesCategory && matchesSearch;
+    });
 
-        if (categoriaDoc.exists()) {
-          categoriaNombre = categoriaDoc.data().nombrecategoria;
-        } else {
-          categoriaNombre = "Categoría no encontrada";
-        }
-      }
+    renderProductTable(filteredProducts);
+}
+// --- FUNCIÓN PARA RENDERIZAR LA TABLA (Genera el HTML de la tabla) ---
+function renderProductTable(productsToRender) {
+  const tableBody = document.getElementById('product-table-body');
+  tableBody.innerHTML = ''; // Limpiamos la tabla antes de renderizar
 
-      const row = document.createElement('tr');
-      let fechaLegible = "No disponible";
-      if (producto.fechaingreso && typeof producto.fechaingreso.toDate === 'function') {
-        fechaLegible = producto.fechaingreso.toDate().toLocaleString();
-      }
-
-      // Agregamos una clase a la fila para poder identificarla en la búsqueda
-      row.classList.add('fila-producto');
-
-      row.innerHTML = `
-        <td class="nombre-producto">${producto.nombreproducto}</td>
-        <td>${producto.stock}</td>
-        <td>$${producto.precio}</td>
-        <td>${fechaLegible}</td>
-        <td>${categoriaNombre}</td> 
-      `;
-      tableBody.appendChild(row);
+  productsToRender.forEach(producto => {
+    const row = document.createElement('tr');
+    row.classList.add('fila-producto'); // Para la búsqueda
+    
+    let fechaLegible = "No disponible";
+    if (producto.fechaingreso && typeof producto.fechaingreso.toDate === 'function') {
+      fechaLegible = producto.fechaingreso.toDate().toLocaleString();
     }
 
-  } catch (error) {
-    console.error("🔥 Error al obtener los productos:", error);
-  }
+    row.innerHTML = `
+      <td class="nombre-producto">${producto.nombreproducto}</td>
+      <td>${producto.stock}</td>
+      <td>$${producto.precio}</td>
+      <td>${fechaLegible}</td>
+      <td>${producto.categoriaNombre}</td> 
+    `;
+    tableBody.appendChild(row);
+  });
 }
-// Llama a la función para que se ejecute
-mostrarProductos();
-
-// --- NUEVA FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS ---
+// --- FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS (Sin cambios) ---*/
 async function mostrarRegistros() {
-  const tableBody = document.getElementById('registro-table-body');
-  tableBody.innerHTML = '';
-
-  try {
-    const querySnapshot = await getDocs(collection(db, "registro")); // Cambiado a 'registro'
-
-    for (const registroDoc of querySnapshot.docs) {
-      const registro = registroDoc.data();
-      
-      // Variables para guardar los nombres de las referencias
-      let nombreProducto = "Producto no encontrado";
-      let nombreResponsable = "Responsable no encontrado";
-      
-      // 1. Obtener el nombre del producto desde la referencia
-      if (registro.codigo) { // Asumiendo que 'codigo' es la referencia al producto
-        const productoDoc = await getDoc(registro.codigo);
-        if (productoDoc.exists()) {
-          nombreProducto = productoDoc.data().nombreproducto;
+    // ... Tu código actual para mostrarRegistros ...
+    const tableBody = document.getElementById('registro-table-body');
+    tableBody.innerHTML = '';
+  
+    try {
+      const querySnapshot = await getDocs(collection(db, "registro")); 
+  
+      for (const registroDoc of querySnapshot.docs) {
+        const registro = registroDoc.data();
+        
+        let nombreProducto = "Producto no encontrado";
+        let nombreResponsable = "Responsable no encontrado";
+        
+        if (registro.codigo) { 
+          const productoDoc = await getDoc(registro.codigo);
+          if (productoDoc.exists()) {
+            nombreProducto = productoDoc.data().nombreproducto;
+          }
         }
-      }
-
-      // 2. Obtener el nombre del responsable desde la referencia
-      if (registro.responsable) {
-        const responsableDoc = await getDoc(registro.responsable);
-        if (responsableDoc.exists()) {
-          const respData = responsableDoc.data();
-          nombreResponsable = `${respData.nombre} ${respData.apellido}`;
+  
+        if (registro.responsable) {
+          const responsableDoc = await getDoc(registro.responsable);
+          if (responsableDoc.exists()) {
+            const respData = responsableDoc.data();
+            nombreResponsable = `${respData.nombre} ${respData.apellido}`;
+          }
         }
+  
+        const row = document.createElement('tr');
+        let fechaSalida = "No disponible";
+        if (registro.fsalidabodega && typeof registro.fsalidabodega.toDate === 'function') {
+            fechaSalida = registro.fsalidabodega.toDate().toLocaleString();
+        }
+  
+        row.innerHTML = `
+          <td>${nombreProducto}</td>
+          <td>${nombreResponsable}</td>
+          <td>Salida</td> 
+          <td>${registro.lote || 'N/A'}</td> 
+          <td>${fechaSalida}</td>
+        `;
+        tableBody.appendChild(row);
       }
-
-      const row = document.createElement('tr');
-      // Usamos fsalidabodega como la fecha principal del movimiento
-      let fechaSalida = "No disponible";
-      if (registro.fsalidabodega && typeof registro.fsalidabodega.toDate === 'function') {
-          fechaSalida = registro.fsalidabodega.toDate().toLocaleString();
-      }
-
-      row.innerHTML = `
-        <td>${nombreProducto}</td>
-        <td>${nombreResponsable}</td>
-        <td>Salida</td> <td>${registro.lote || 'N/A'}</td> <td>${fechaSalida}</td>
-      `;
-      tableBody.appendChild(row);
+    } catch (error) {
+      console.error("🔥 Error al obtener los registros:", error);
     }
-  } catch (error) {
-    console.error("🔥 Error al obtener los registros:", error);
-  }
 }
+// --- LÓGICA PARA MANEJAR LAS PESTAÑAS Y FILTROS ---
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const categoryFilter = document.getElementById('category-filter');
+  const applyFilterBtn = document.getElementById('apply-filter-btn');
+  const clearFilterBtn = document.getElementById('clear-filter-btn');
+  const buscadorInput = document.getElementById('buscador'); // Obtener el input de búsqueda
+
+  // Event Listeners para las pestañas
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = document.querySelector("#" + tab.dataset.tab);
+
+      tabContents.forEach(content => { content.classList.remove('is-active'); });
+      tabs.forEach(t => { t.classList.remove('is-active'); });
+
+      target.classList.add('is-active');
+      tab.classList.add('is-active');
+
+      // Al cambiar de pestaña, recalcular el filtro y la búsqueda
+      if (tab.dataset.tab === 'inventario') {
+          applyCategoryFilterAndRender(); // Ahora también aplica la búsqueda
+      } else if (tab.dataset.tab === 'historial') {
+          mostrarRegistros();
+      }
+    });
+  });
+
+  // Event Listeners para los filtros de categoría
+  if (applyFilterBtn) {
+    applyFilterBtn.addEventListener('click', () => {
+      applyCategoryFilterAndRender();
+    });
+  }
+
+  if (clearFilterBtn) {
+    clearFilterBtn.addEventListener('click', () => {
+      if (categoryFilter) categoryFilter.value = 'all'; // Restablecer el select a "Todas"
+      if (buscadorInput) buscadorInput.value = ''; // Limpiar la búsqueda
+      applyCategoryFilterAndRender(); // Mostrar todos los productos sin filtro/búsqueda
+    });
+  }
+
+  // Event Listener para el buscador
+  if (buscadorInput) {
+    buscadorInput.addEventListener('keyup', () => {
+      applyCategoryFilterAndRender(); // Aplica el filtro de búsqueda dinámicamente
+    });
+  }
+
+
+  // Cargar categorías y productos al iniciar
+  cargarCategoriasEnFiltro();
+  fetchProductsFromFirestore(); // Carga todos los productos de Firestore
+  mostrarRegistros(); // Carga los registros (se renderizarán solo si esa pestaña está activa)
+});
+
+
 
 // Funcion de inicio de sesion
 const auth = getAuth(app); // Obtiene una referencia al servicio de autenticación
