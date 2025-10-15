@@ -141,54 +141,52 @@ function renderProductTable(productsToRender) {
   });
 }
 // --- FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS (Sin cambios) ---*/
+// --- FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS (ACTUALIZADA) ---
 async function mostrarRegistros() {
-    // ... Tu código actual para mostrarRegistros ...
-    const tableBody = document.getElementById('registro-table-body');
-    tableBody.innerHTML = '';
-  
-    try {
-      const querySnapshot = await getDocs(collection(db, "registro")); 
-  
-      for (const registroDoc of querySnapshot.docs) {
-        const registro = registroDoc.data();
-        
-        let nombreProducto = "Producto no encontrado";
-        let nombreResponsable = "Responsable no encontrado";
-        
-        if (registro.codigo) { 
-          const productoDoc = await getDoc(registro.codigo);
-          if (productoDoc.exists()) {
-            nombreProducto = productoDoc.data().nombreproducto;
-          }
-        }
-  
-        if (registro.responsable) {
-          const responsableDoc = await getDoc(registro.responsable);
-          if (responsableDoc.exists()) {
-            const respData = responsableDoc.data();
-            nombreResponsable = `${respData.nombre} ${respData.apellido}`;
-          }
-        }
-  
-        const row = document.createElement('tr');
-        let fechaSalida = "No disponible";
-        if (registro.fsalidabodega && typeof registro.fsalidabodega.toDate === 'function') {
-            fechaSalida = registro.fsalidabodega.toDate().toLocaleString();
-        }
-  
-        row.innerHTML = `
-          <td>${nombreProducto}</td>
-          <td>${nombreResponsable}</td>
-          <td>Salida</td> 
-          <td>${registro.lote || 'N/A'}</td> 
-          <td>${fechaSalida}</td>
-        `;
-        tableBody.appendChild(row);
+  const tableBody = document.getElementById('registro-table-body');
+  tableBody.innerHTML = ''; // Limpiamos la tabla antes de añadir nuevos datos
+
+  try {
+    // Apuntamos a la colección 'registros'
+    const querySnapshot = await getDocs(collection(db, "registro")); 
+
+    for (const registroDoc of querySnapshot.docs) {
+      const registro = registroDoc.data();
+      
+      let nombreProducto = registro.nombreproducto || "N/A";
+      let nombreResponsable = registro.ingresadoPor || "N/A"; // Ahora es un string directo
+      let tipoMovimiento = "Desconocido";
+      let fechaMovimiento = "No disponible";
+      let cantidadMovida = registro.stock || 0; // Usaremos 'stock' como la cantidad movida
+      let ubicacion = registro.numeroEstante || "N/A"; // Nuevo campo para la ubicación
+
+     // Determinar el tipo de movimiento y la fecha relevante de forma segura
+      if (registro.fecha_salida && typeof registro.fecha_salida === 'object' && typeof registro.fecha_salida.toDate === 'function') {
+        tipoMovimiento = "Salida";
+        fechaMovimiento = registro.fecha_salida.toDate().toLocaleString();
+      } else if (registro.fecha_ingreso && typeof registro.fecha_ingreso === 'object' && typeof registro.fecha_ingreso.toDate === 'function') {
+        tipoMovimiento = "Entrada";
+        fechaMovimiento = registro.fecha_ingreso.toDate().toLocaleString();
+      } else {
+          // Si ninguna fecha es válida o no existe
+          fechaMovimiento = "Fecha inválida";
       }
-    } catch (error) {
-      console.error("🔥 Error al obtener los registros:", error);
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${nombreProducto}</td>
+        <td>${nombreResponsable}</td>
+        <td>${tipoMovimiento}</td> 
+        <td>${cantidadMovida}</td> 
+        <td>${fechaMovimiento}</td>
+        <td>${ubicacion}</td> `;
+      tableBody.appendChild(row);
     }
+  } catch (error) {
+    console.error("🔥 Error al obtener los registros:", error);
+  }
 }
+
 // --- LÓGICA PARA MANEJAR LAS PESTAÑAS Y FILTROS ---
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.tab-button');
@@ -412,3 +410,4 @@ document.getElementById("buscador").addEventListener("keyup", function() {
     }
   });
 });
+

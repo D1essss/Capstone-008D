@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - QRDEN</title>
-    <link rel="stylesheet" href="../css/estilo_principal.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="../css/estilo_principal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-box-open icon-logo"></i>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" class="nav-item active" onclick="window.electronAPI.navigate('dashboard.html')"><i class="fas fa-chart-line nav-icon"></i> Dashboard</a></li>
+          <li><a href="#" class="nav-item" onclick="window.electronAPI.navigate('index.html')"><i class="fas fa-box nav-icon"></i> Inventario</a></li>
+          <li><a href="#" class="nav-item" onclick="window.electronAPI.navigate('perfil.html')"><i class="fas fa-user nav-icon"></i> Perfil</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-box-open icon-logo"></i>
-            </div>
-            <nav class="sidebar-nav">
-   <nav class="sidebar-nav">
-    <ul>
-        <li><a href="#" onclick="handleNav('dashboard.html', this)" class="nav-item active"><i class="fas fa-chart-line nav-icon"></i> Dashboard</a></li>
-        <li><a href="#" onclick="handleNav('index.html', this)" class="nav-item"><i class="fas fa-box nav-icon"></i> Inventario</a></li> 
-        <li><a href="#" onclick="handleNav('perfil.html', this)" class="nav-item"><i class="fas fa-user nav-icon"></i> Perfil</a></li> 
-    </ul>
-</nav>
-</nav>
-        </aside>
+    <main class="main-content">
+      <div class="content-header">
+        <h1>Dashboard de Bodega</h1>
+      </div>
+      
+       <div class="dashboard-grid">
+        <div class="chart-card">
+          <h3>Top 5 Productos con Más Movimiento (Unidades)</h3>
+          <canvas id="topProductsChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Entradas vs. Salidas</h3>
+          <canvas id="entryExitChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Top Empleado por Movimientos</h3>
+          <canvas id="employeeMovementsChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Movimiento de Productos por Día</h3>
+          <canvas id="dailyMovementsChart"></canvas>
+        </div>
+      </div>
+    </main>
+  </div>
 
-        <main class="main-content">
-            <header class="content-header">
-                <h1>Qrden</h1>
-                <button  class="add-product-btn" onclick="window.electronAPI.navigate('registro.html')">Registrar Nuevo Encargado</button>
-            </header>
-<script  src="../nav-script.js"></script>
-<script src="../renderer.js" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../dashboard-renderer.js" type="module"></script>
 </body>
 </html>

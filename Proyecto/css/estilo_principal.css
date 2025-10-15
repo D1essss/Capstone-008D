@@ -1196,3 +1196,34 @@ body {
     background-color: #5a6268;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+/* ==========================================================================
+   16. ESTILOS PARA EL DASHBOARD Y GRÁFICOS
+   ========================================================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Rejilla responsiva */
+  gap: 30px; /* Espacio entre las tarjetas de los gráficos */
+}
+
+.chart-card {
+  background-color: var(--card-background);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+.chart-card h3 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.2rem;
+}
+
+/* Contenedor del canvas para que el gráfico se ajuste bien */
+.chart-card canvas {
+  width: 100% !important;
+  height: 350px !important; /* Altura fija para consistencia */
+}
