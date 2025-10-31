@@ -5,7 +5,7 @@ console.log("Paso 1: renderer.js se está ejecutando...");
 // Importa las funciones que necesitas de los SDKs de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, doc, getDoc,query,where } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import {  createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -292,6 +292,80 @@ async function handleLogin() {
     // 3. Mostrar error de credenciales en el párrafo
     errorMessage.textContent = "Correo o contraseña incorrectos.";
   }
+}
+// --- INICIO DE CÓDIGO AÑADIDO PARA RESETEO ---
+
+// 1. Obtener todos los nuevos elementos
+const loginForm = document.getElementById('loginForm');
+const resetForm = document.getElementById('resetForm');
+
+const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+const backToLoginLink = document.getElementById('backToLoginLink');
+const resetBtn = document.getElementById('resetBtn');
+const resetEmailInput = document.getElementById('reset-email-input');
+const resetMessage = document.getElementById('reset-message');
+const errorMessage = document.getElementById('error-message'); // Ya deberías tenerla
+
+// 2. Listener para mostrar el formulario de reseteo
+if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault(); // Evita que el enlace recargue la página
+        loginForm.style.display = 'none';
+        resetForm.style.display = 'block';
+        errorMessage.textContent = ''; // Limpia errores antiguos
+    });
+}
+
+// 3. Listener para volver al login
+if (backToLoginLink) {
+    backToLoginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        resetMessage.textContent = ''; // Limpia mensajes antiguos
+    });
+}
+
+// 4. Listener para el botón de enviar enlace
+if (resetBtn) {
+    resetBtn.addEventListener('click', async () => {
+        const email = resetEmailInput.value;
+
+        if (!email) {
+            resetMessage.textContent = "Por favor, ingresa tu correo.";
+            resetMessage.style.color = 'var(--danger-color)'; // Usará tu CSS
+            return;
+        }
+
+        // Desactivar botón mientras se envía
+        resetBtn.disabled = true;
+        resetBtn.textContent = "Enviando...";
+        resetMessage.textContent = '';
+
+        try {
+            // La función de Firebase para enviar el correo
+            await sendPasswordResetEmail(auth, email);
+            
+            resetMessage.textContent = "¡Correo enviado! Revisa tu bandeja de entrada (y spam).";
+            resetMessage.style.color = 'var(--status-en-stock-text)'; // Color verde de tu CSS
+            resetEmailInput.disabled = true;
+            resetBtn.style.display = 'none'; // Oculta el botón
+            backToLoginLink.textContent = "Volver"; // Cambia el texto del enlace de volver
+
+        } catch (error) {
+            console.error("Error al enviar correo de reseteo:", error);
+            if (error.code === 'auth/user-not-found') {
+                resetMessage.textContent = "No existe cuenta registrada con ese correo.";
+            } else {
+                resetMessage.textContent = "Error al enviar el correo. Intenta de nuevo.";
+            }
+            resetMessage.style.color = 'var(--danger-color)';
+            
+            // Reactivar botón si falla
+            resetBtn.disabled = false;
+            resetBtn.textContent = "Enviar Enlace";
+        }
+    });
 }
 
 

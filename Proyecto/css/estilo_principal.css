@@ -236,6 +236,7 @@ body {
     flex-grow: 1; /* Para que la tarjeta ocupe el espacio disponible */
     display: flex;
     flex-direction: column;
+    table-layout: fixed; /* <-- AÑADE ESTA LÍNEA AQUÍ TAMBIÉN */
 }
 
 .table-controls {
@@ -718,6 +719,7 @@ body {
   border-collapse: collapse; /* Une los bordes de las celdas */
   margin-top: 20px;
   font-size: 14px;
+  table-layout: fixed; 
 }
 
 .product-table thead {
@@ -968,23 +970,22 @@ body {
     color: var(--text-light);
 }
 /* ==========================================================================
-   13. DISEÑO EXCLUSIVO PARA LA PÁGINA DE REGISTRO
+   13. DISEÑO RESPONSIVE PARA LA PÁGINA DE REGISTRO
    ========================================================================== */
 
-/* Aseguramos que el body de la página de registro centre el contenido */
 .registration-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 20px; /* Padding para pantallas pequeñas */
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
-/* La tarjeta principal que contiene todo el formulario */
 .registration-card {
-  max-width: 900px;  /* <<< El ancho que buscamos */
-  width: 100%;
-  padding: 40px 50px; /* Padding vertical y horizontal */
+  max-width: 900px;
+  width: 100%; /* Ocupa el 100% del espacio disponible */
+  padding: 30px 25px; /* Padding más pequeño para móviles */
   background-color: var(--card-background);
   border-radius: 12px;
   box-shadow: var(--shadow-md);
@@ -992,31 +993,32 @@ body {
 }
 
 .registration-title {
-  font-size: 2.2rem;
-  margin-bottom: 40px;
+  font-size: 1.8rem; /* Título más pequeño para móviles */
+  margin-bottom: 30px;
   text-align: center;
   color: var(--text-color);
 }
 
-/* El "plano" de nuestro formulario: una cuadrícula (grid) */
+/* --- ESTILO "MOBILE-FIRST" (POR DEFECTO) --- */
 .registration-form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
-  gap: 25px 40px; /* Espacio vertical y horizontal entre los campos */
+  /* Por defecto, usamos UNA SOLA COLUMNA */
+  grid-template-columns: 1fr;
+  gap: 20px; /* Un solo valor de gap para la columna vertical */
   width: 100%;
 }
 
-/* Clase para elementos que deben ocupar todo el ancho (las 2 columnas) */
+/* Todos los elementos ocupan el ancho completo por defecto */
 .grid-full-width {
   grid-column: 1 / -1;
 }
 
 .registration-form-grid .form-section-title {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--primary-color);
   text-align: left;
-  margin-top: 15px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 0;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--border-color);
 }
@@ -1052,7 +1054,7 @@ body {
 }
 
 .registration-form-grid .login-btn {
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 15px;
   font-size: 1.1rem;
 }
@@ -1062,6 +1064,143 @@ body {
   margin-top: 10px;
   text-decoration: none;
   color: var(--primary-color);
+}
+
+
+/* --- MEDIA QUERY PARA PANTALLAS MÁS GRANDES --- */
+/* (Notebooks y Desktops) */
+/* Cuando la pantalla tenga 768px de ancho o MÁS... */
+@media (min-width: 768px) {
+
+  .registration-card {
+    padding: 40px 50px; /* Volvemos al padding más grande */
+  }
+
+  .registration-title {
+    font-size: 2.2rem; /* Título más grande */
+  }
+
+  /* ...activamos nuestro diseño de DOS COLUMNAS */
+  .registration-form-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 25px 40px; /* Volvemos al gap de filas y columnas */
+  }
+}/* ==========================================================================
+   13. DISEÑO RESPONSIVE PARA LA PÁGINA DE REGISTRO
+   ========================================================================== */
+
+.registration-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Padding para pantallas pequeñas */
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.registration-card {
+  max-width: 900px;
+  width: 100%; /* Ocupa el 100% del espacio disponible */
+  padding: 30px 25px; /* Padding más pequeño para móviles */
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+.registration-title {
+  font-size: 1.8rem; /* Título más pequeño para móviles */
+  margin-bottom: 30px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* --- ESTILO "MOBILE-FIRST" (POR DEFECTO) --- */
+.registration-form-grid {
+  display: grid;
+  /* Por defecto, usamos UNA SOLA COLUMNA */
+  grid-template-columns: 1fr;
+  gap: 20px; /* Un solo valor de gap para la columna vertical */
+  width: 100%;
+}
+
+/* Todos los elementos ocupan el ancho completo por defecto */
+.grid-full-width {
+  grid-column: 1 / -1;
+}
+
+.registration-form-grid .form-section-title {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.registration-form-grid .input-group {
+  text-align: left;
+}
+
+.registration-form-grid .input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.registration-form-grid .input-group input,
+.registration-form-grid .input-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--background-light);
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.registration-form-grid .input-group input:focus,
+.registration-form-grid .input-group select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+  outline: none;
+}
+
+.registration-form-grid .login-btn {
+  margin-top: 15px;
+  padding: 15px;
+  font-size: 1.1rem;
+}
+
+.registration-form-grid .back-link {
+  text-align: center;
+  margin-top: 10px;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+
+/* --- MEDIA QUERY PARA PANTALLAS MÁS GRANDES --- */
+/* (Notebooks y Desktops) */
+/* Cuando la pantalla tenga 768px de ancho o MÁS... */
+@media (min-width: 768px) {
+
+  .registration-card {
+    padding: 40px 50px; /* Volvemos al padding más grande */
+  }
+
+  .registration-title {
+    font-size: 2.2rem; /* Título más grande */
+  }
+
+  /* ...activamos nuestro diseño de DOS COLUMNAS */
+  .registration-form-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 25px 40px; /* Volvemos al gap de filas y columnas */
+  }
 }
 /* ==========================================================================
    14. ESTILOS PARA EL SISTEMA DE PESTAÑAS (TABS)
@@ -1226,4 +1365,68 @@ body {
 .chart-card canvas {
   width: 100% !important;
   height: 350px !important; /* Altura fija para consistencia */
+}
+/* ==========================================================================
+   17. ESTILOS PARA RECUPERACIÓN DE CONTRASEÑA EN LOGIN
+   ========================================================================== */
+
+/* Contenedor para el enlace "Olvidaste..." */
+.login-options {
+  width: 100%;
+  text-align: right;
+  margin-top: -10px; /* Sube el enlace */
+  margin-bottom: 20px; /* Espacio antes del botón */
+}
+
+/* Estilo para el enlace "Olvidaste tu contraseña?" */
+.forgot-password-link {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.forgot-password-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* Instrucciones en el formulario de reseteo */
+.reset-instructions {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Mensajes de error/éxito para ambos formularios */
+.error-message,
+.reset-message {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 15px;
+  text-align: center;
+}
+/* Heredará el color rojo de tu #error-message, pero lo aseguramos */
+.error-message {
+  color: var(--danger-color); 
+}
+.reset-message {
+   color: var(--danger-color); 
+}
+
+
+/* Enlace de "Volver a Iniciar Sesión" */
+.back-link {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+.back-link:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
 }

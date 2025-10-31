@@ -2,63 +2,55 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registrar Empleado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Registrar Empleado</title>
   <link rel="stylesheet" href="../css/estilo_principal.css">
 </head>
 <body class="registration-page">
   <div id="background-slideshow">
-    </div>
+  </div>
   
   <div class="registration-card">
 
-  <h2 class="registration-title">Registrar Empleado</h2>
+    <h2 class="registration-title">Registrar Empleado</h2>
 
-  <form class="registration-form-grid">
-    <h3 class="form-section-title grid-full-width">Datos Personales</h3>
-    <div class="input-group">
-      <label for="nombre-input">Nombre</label>
-      <input type="text" id="nombre-input">
-    </div>
-    <div class="input-group">
-      <label for="apellido-input">Apellido</label>
-      <input type="text" id="apellido-input">
-    </div>
-    <div class="input-group">
-      <label for="rut-input">RUT</label>
-      <input type="text" id="rut-input">
-    </div>
-    <div class="input-group">
-      <label for="telefono-input">Teléfono</label>
-      <input type="text" id="telefono-input">
-    </div>
+    <form class="registration-form-grid">
+      <h3 class="form-section-title grid-full-width">Datos Personales</h3>
+      <div class="input-group">
+        <label for="nombre-input">Nombre</label>
+        <input type="text" id="nombre-input">
+      </div>
+      <div class="input-group">
+        <label for="apellido-input">Apellido</label>
+        <input type="text" id="apellido-input">
+      </div>
+      <div class="input-group">
+        <label for="rut-input">RUT</label>
+        <input type="text" id="rut-input">
+      </div>
+      <div class="input-group">
+        <label for="telefono-input">Teléfono</label>
+        <input type="text" id="telefono-input">
+      </div>
 
-    <h3 class="form-section-title grid-full-width">Datos de Acceso y Cargo</h3>
-    <div class="input-group">
-      <label for="email-input">Correo Electrónico</label>
-      <input type="email" id="email-input">
-    </div>
-    <div class="input-group">
-      <label for="password-input">Contraseña</label>
-      <input type="password" id="password-input">
-    </div>
-    <div class="input-group grid-full-width">
-      <label for="cargo-select">Cargo</label>
-      <select id="cargo-select" class="filter-select">
-        <option value="" disabled selected>Selecciona un cargo...</option>
-      </select>
-    </div>
+      <h3 class="form-section-title grid-full-width">Datos de Acceso y Cargo</h3>
+      <div class="input-group">
+        <label for="email-input">Correo Electrónico</label>
+        <input type="email" id="email-input">
+      </div>
+      <div class="input-group">
+        <label for="password-input">Contraseña</label>
+        <input type="password" id="password-input">
+      </div>
+      <div class="input-group grid-full-width">
+        <label for="cargo-select">Cargo</label>
+        <select id="cargo-select" class="filter-select">
+          <option value="" disabled selected>Selecciona un cargo...</option>
+        </select>
+      </div>
 
-    <button id="registerBtn" type="button" class="login-btn grid-full-width">Registrar Empleado</button>
-    <p id="message" class="grid-full-width" style="margin-top: 10px;"></p>
-    <a href="#" onclick="window.electronAPI.navigate('index.html')" class="grid-full-width back-link">Volver al Inventario</a>
-  </form>
-
-</div>
-</form>
-    </div>
-  
-  
-
-  <script src="../registro-renderer.js" type="module"></script>
+      <button id="registerBtn" type="button" class="login-btn grid-full-width">Registrar Empleado</button>
+      <p id="message" class="grid-full-width" style="margin-top: 10px;"></p>
+      <a href="#" onclick="window.electronAPI.navigate('index.html')" class="grid-full-width back-link">Volver al Inventario</a>
+    </form> </div> <script src="../registro-renderer.js" type="module"></script>
 </body>
 </html>
