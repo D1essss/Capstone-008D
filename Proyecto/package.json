@@ -5,9 +5,9 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
-  "//": "--- ¡AÑADE TODO ESTE BLOQUE 'config' DE AQUÍ ABAJO! ---",
   "config": {
     "forge": {
       "packagerConfig": {},
@@ -30,7 +30,7 @@
           "name": "@electron-forge/publisher-github",
           "config": {
             "repository": {
-              "owner": "TU-USUARIO-DE-GITHUB",
+              "owner": "D1essss",
               "name": "Capstone-008D"
             },
             "prerelease": false,
