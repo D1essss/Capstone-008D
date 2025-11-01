@@ -1,6 +1,6 @@
 {
   "name": "capstone-008d",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -37,6 +37,18 @@
             "draft": false
           }
         }
+      ],
+      "plugins": [
+        {
+          "name": "@electron-forge/plugin-webpack",
+          "config": {
+            "mainConfig": {
+              "externals": {
+                "update-electron-app": "require('update-electron-app')"
+              }
+            }
+          }
+        }
       ]
     }
   },
@@ -57,6 +69,7 @@
     "@electron-forge/maker-zip": "^7.10.2",
     "@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
     "@electron-forge/plugin-fuses": "^7.10.2",
+    "@electron-forge/plugin-webpack": "^7.10.2",
     "@electron-forge/publisher-github": "^7.10.2",
     "@electron/fuses": "^1.8.0",
     "electron": "^38.2.2"
