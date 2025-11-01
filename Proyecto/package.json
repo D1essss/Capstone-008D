@@ -1,6 +1,6 @@
 {
   "name": "capstone-008d",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -38,19 +38,37 @@
           }
         }
       ],
-    "plugins": [
+    "//": "--- ¡REEMPLAZA EL BLOQUE 'plugins' ANTERIOR POR ESTE! ---",
+      "plugins": [
         {
           "name": "@electron-forge/plugin-webpack",
           "config": {
+            
             "mainConfig": {
-              "entry": "main.js",
+              "entry": "./main.js",
               "externals": {
                 "update-electron-app": "require('update-electron-app')"
               }
+            },
+
+            "renderer": {
+              "config": {
+                
+              },
+              "entryPoints": [
+                {
+                  "name": "main_window",
+                  "html": "./html/iniciosesion.html",
+                  "preload": {
+                    "js": "./preload.js"
+                  }
+                }
+              ]
             }
           }
         }
       ]
+    
     }
   },
   "keywords": [],
