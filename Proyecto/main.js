@@ -3,7 +3,7 @@
 // Módulos para controlar la aplicación y crear ventanas
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
-__non_webpack_require__('update-electron-app')();
+require('update-electron-app').default();
 
 // Función que crea la ventana principal del navegador.
 const createWindow = () => {
