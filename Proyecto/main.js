@@ -26,7 +26,6 @@ const createWindow = () => {
 
 // Llama a createWindow() cuando la aplicación está lista.
 app.whenReady().then(() => {
-  require('update-electron-app')();
   createWindow();
 
   app.on('activate', () => {
