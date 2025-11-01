@@ -1,4 +1,5 @@
 // main.js
+if (require('electron-squirrel-startup')) app.quit();
 
 // Módulos para controlar la aplicación y crear ventanas
 const { app, BrowserWindow, ipcMain } = require('electron');
