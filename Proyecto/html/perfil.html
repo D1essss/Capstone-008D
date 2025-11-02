@@ -49,6 +49,35 @@
         <span id="user-phone">...</span>
       </div>
     </div>
+    <div class="preferences-section"> 
+<h3>PIN de Seguridad (2FA)</h3>
+<div id="pin-disabled-section">
+ <p>Añade una capa extra de seguridad a tu cuenta con un PIN de 6 dígitos.</p>
+ <button id="createPinBtn" class="login-btn">Crear PIN de Seguridad</button>
+</div>
+
+ <div id="pin-enabled-section" style="display: none;">
+ <p style="color: var(--status-en-stock-text); font-weight: bold;">¡PIN de Seguridad HABILITADO!</p>
+ <button id="changePinBtn" class="login-btn">Cambiar PIN</button>
+ <button id="removePinBtn" class="logout-btn" style="margin-left: 10px;">Eliminar PIN</button>
+ </div>
+
+ <div id="pin-setup-section" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+ <h4 id="pin-setup-title">Crear tu PIN de Seguridad</h4>
+ <div class="form-group">
+<label for="new-pin-input">Nuevo PIN (6 dígitos numéricos)</label>
+ <input type="password" id="new-pin-input" placeholder="●●●●●●" maxlength="6">
+ </div>
+ <div class="form-group">
+ <label for="confirm-pin-input">Confirmar Nuevo PIN</label>
+ <input type="password" id="confirm-pin-input" placeholder="●●●●●●" maxlength="6">
+ </div>
+ <button id="savePinBtn" class="login-btn">Guardar PIN</button>
+ <button id="cancelPinBtn" class="logout-btn" style="background-color: var(--text-light); margin-left: 10px;">Cancelar</button>
+
+ <p id="pin-error-message" style="color: var(--danger-color); margin-top: 10px;"></p>
+ </div>
+</div>
     
     <div class="profile-actions">
         <button id="changePasswordBtn" class="save-changes-btn full-width">
@@ -82,7 +111,6 @@
     <p id="modal-password-message" style="margin-top: 15px;"></p>
   </div>
 </div>
-
   <script src="../perfil-renderer.js" type="module"></script>
 </body>
 </html>

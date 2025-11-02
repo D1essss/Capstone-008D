@@ -283,15 +283,29 @@ async function handleLogin() {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    sessionStorage.setItem('loggedInUserUid', user.uid);
-    console.log("✅ Inicio de sesión exitoso:", userCredential.user.uid);
-    window.electronAPI.navigate('index.html');
+   // 3. Revisar en Firestore si el usuario tiene un PIN configurado
+    const userRef = doc(db, "empleados", user.uid);
+    const userSnap = await getDoc(userRef);
 
-  } catch (error) {
-    console.error("🔥 Error al iniciar sesión:", error.message);
-    // 3. Mostrar error de credenciales en el párrafo
-    errorMessage.textContent = "Correo o contraseña incorrectos.";
-  }
+    if (userSnap.exists() && userSnap.data().securityPin) {
+      // SÍ TIENE PIN: El usuario debe verificarlo.
+      // a. Guardamos el UID temporalmente para que la siguiente página sepa quién es.
+      sessionStorage.setItem('uidFor2FA', user.uid);
+      
+      // b. Redirigimos a la página de verificación de PIN.
+      window.electronAPI.navigate('verificar-pin.html');
+
+    } else {
+      // NO TIENE PIN: El usuario no ha configurado 2FA.
+      // Lo dejamos entrar directamente (comportamiento normal).
+      sessionStorage.setItem('loggedInUserUid', user.uid);
+      console.log("✅ Inicio de sesión exitoso (sin PIN):", user.uid);
+      window.electronAPI.navigate('index.html');
+    }
+}
+catch (error) {
+    console.error("🔥 Error al iniciar sesión:", error);
+}errorMessage.textContent = 'Correo o contraseña incorrectos.';
 }
 // --- INICIO DE CÓDIGO AÑADIDO PARA RESETEO ---
 

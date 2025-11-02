@@ -1,7 +1,7 @@
 // js/perfil-renderer.js
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc,updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 const changePasswordModal = document.getElementById('changePasswordModal');
 const closeButton = changePasswordModal ? changePasswordModal.querySelector('.close-button') : null;
@@ -50,6 +50,15 @@ async function cargarDatosPerfil(uid) {
           nombreCargo = cargoSnap.data().nombrecargo;
         }
       }
+      if (empleadoData.securityPin) {
+  // Sí está configurado: muestra la sección "Activado"
+  document.getElementById('pin-enabled-section').style.display = 'block';
+  document.getElementById('pin-disabled-section').style.display = 'none';
+} else {
+  // No está configurado: muestra la sección "Desactivado"
+  document.getElementById('pin-enabled-section').style.display = 'none';
+  document.getElementById('pin-disabled-section').style.display = 'block';
+}
 
       // 1. Poblar el HTML con los datos
       document.getElementById('user-name').textContent = `${empleadoData.nombre} ${empleadoData.apellido}`;
@@ -166,10 +175,103 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmChangePasswordBtn = document.getElementById('confirmChangePasswordBtn');
   const modalPasswordMessageEl = document.getElementById('modal-password-message');
 
+// --- Listeners para 2FA (PIN de Seguridad) ---
+const createPinBtn = document.getElementById('createPinBtn');
+const changePinBtn = document.getElementById('changePinBtn');
+const removePinBtn = document.getElementById('removePinBtn');
+const savePinBtn = document.getElementById('savePinBtn');
+const cancelPinBtn = document.getElementById('cancelPinBtn');
+
+if (createPinBtn) createPinBtn.addEventListener('click', () => showPinSetup(false));
+if (changePinBtn) changePinBtn.addEventListener('click', () => showPinSetup(true));
+if (removePinBtn) removePinBtn.addEventListener('click', removePin);
+if (savePinBtn) savePinBtn.addEventListener('click', savePin);
+if (cancelPinBtn) cancelPinBtn.addEventListener('click', cancelPinSetup);
+
+// ... (tus listeners existentes para logout, cambiar contraseña, etc. se quedan) ...
+
   const logoutBtn = document.getElementById('logoutBtn');
   const changePasswordBtn = document.getElementById('changePasswordBtn');
 
   // --- 2. Definir las funciones manejadoras del modal (AHORA DENTRO DE DOMContentLoaded) ---
+  // --- NUEVAS FUNCIONES DE PIN DE SEGURIDAD ---
+
+function showPinSetup(isChanging = false) {
+  document.getElementById('pin-setup-title').textContent = isChanging ? 'Cambiar tu PIN de Seguridad' : 'Crear tu PIN de Seguridad';
+  document.getElementById('new-pin-input').value = '';
+  document.getElementById('confirm-pin-input').value = '';
+  document.getElementById('pin-error-message').textContent = '';
+
+  document.getElementById('pin-setup-section').style.display = 'block';
+  document.getElementById('pin-enabled-section').style.display = 'none';
+  document.getElementById('pin-disabled-section').style.display = 'none';
+}
+
+function cancelPinSetup() {
+  document.getElementById('pin-setup-section').style.display = 'none';
+  // Recarga los datos para mostrar el estado correcto (activado o desactivado)
+  if (loggedInUserUid) cargarDatosPerfil(loggedInUserUid);
+}
+
+async function savePin() {
+  const newPin = document.getElementById('new-pin-input').value;
+  const confirmPin = document.getElementById('confirm-pin-input').value;
+  const errorEl = document.getElementById('pin-error-message');
+
+  // --- Validaciones ---
+  if (!newPin || !confirmPin) {
+    errorEl.textContent = 'Ambos campos son obligatorios.';
+    return;
+  }
+  if (newPin.length !== 6 || confirmPin.length !== 6) {
+    errorEl.textContent = 'El PIN debe tener exactamente 6 dígitos.';
+    return;
+  }
+  if (!/^\d+$/.test(newPin)) { // Comprueba si son solo números
+    errorEl.textContent = 'El PIN solo puede contener números.';
+    return;
+  }
+  if (newPin !== confirmPin) {
+    errorEl.textContent = 'Los PINs no coinciden.';
+    return;
+  }
+
+  // ¡Validación exitosa!
+  errorEl.textContent = '';
+  try {
+    const userRef = doc(db, "empleados", loggedInUserUid);
+    await updateDoc(userRef, {
+      securityPin: newPin // ¡Guardamos el PIN!
+    });
+
+    alert('¡Éxito! Tu PIN de seguridad ha sido guardado.');
+    cancelPinSetup(); // Oculta el formulario y muestra la sección "Activado"
+
+  } catch (err) {
+    console.error("Error al guardar el PIN:", err);
+    errorEl.textContent = 'Error al guardar en la base de datos.';
+  }
+}
+
+async function removePin() {
+  if (!confirm('¿Estás seguro de que quieres eliminar tu PIN de seguridad? Esta acción no se puede deshacer.')) {
+    return;
+  }
+
+  try {
+    const userRef = doc(db, "empleados", loggedInUserUid);
+    await updateDoc(userRef, {
+      securityPin: null // O usa deleteField() si prefieres
+    });
+
+    alert('PIN de seguridad eliminado con éxito.');
+    cancelPinSetup(); // Oculta el formulario y muestra la sección "Desactivado"
+
+  } catch (err) {
+    console.error("Error al eliminar el PIN:", err);
+    alert('Error al eliminar el PIN de la base de datos.');
+  }
+}
 
   // Función para abrir el modal de cambiar contraseña
   function openChangePasswordModal() {

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <title>Verificar PIN</title> <link rel="stylesheet" href="../css/estilo_principal.css">
+ </head>
+<body>
+ <div id="background-slideshow"></div>
+ <div class="login-wrapper">
+ <div class="login-container">
+<img src="../IMG/logo qorden.png" alt="Logo de la empresa" class="login-logo">
+
+ <h2 class="login-title">Verificar PIN de Seguridad</h2> 
+ <form class="login-form">  <p class="reset-instructions" style="margin-bottom: 20px;">Ingresa tu PIN de 6 dígitos para continuar.</p>
+        
+ <div class="input-group">
+ <label for="pin-input">PIN de 6 Dígitos</label>
+ <input type="password" id="pin-input" placeholder="●●●●●●" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
+</div>
+
+<button class="login-btn" id="verifyPinBtn" type="button">Verificar e Ingresar</button>
+
+ <p id="error-message" class="error-message"></p>
+ </form>
+      
+      <a href="#" id="cancelLoginBtn" class="back-link">Cancelar e ir a Inicio</a>
+</div>
+</div>
+
+<script src="../verificar-pin-renderer.js" type="module"></script> 
+</body>
+</html>
