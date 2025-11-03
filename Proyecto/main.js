@@ -1,52 +1,55 @@
 // main.js
 
-// Módulos para controlar la aplicación y crear ventanas
+// 1. Módulos para controlar la aplicación
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 
+// 2. LA GUARDIA DE SQUIRREL (¡DEBE ESTAR AQUÍ!)
+// Maneja los eventos de instalación/desinstalación de Squirrel en Windows
+// ANTES de que la app haga cualquier otra cosa.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-// Función que crea la ventana principal del navegador.
+// 3. Función que crea la ventana principal del navegador.
 const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 1000,
-    height: 800,
-    webPreferences: {
-      // Adjunta el script 'preload.js' a la ventana del navegador.
-      // Este script actúa como un puente seguro.
-      preload: path.join(__dirname, 'preload.js')
-    }
-  });
+  const win = new BrowserWindow({
+    width: 1000,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
 
-  // Carga la página de inicio de sesión inicial.
-  win.loadFile(path.join(__dirname, 'html/iniciosesion.html'));
+  // Carga la página de inicio de sesión inicial.
+  win.loadFile(path.join(__dirname, 'html/iniciosesion.html'));
 };
 
-// Llama a createWindow() cuando la aplicación está lista.
+// 4. Llama a createWindow() CUANDO la app está lista.
 app.whenReady().then(() => {
-  createWindow();
+  require('update-electron-app')();
 
-  app.on('activate', () => {
-    // En macOS, recrea la ventana si se hace clic en el ícono del dock.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
+  // 6. Creamos la ventana
+  createWindow();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
 });
 
+// 7. Navegación (esto está perfecto)
 ipcMain.on('navigate', (event, page) => {
-  console.log('Paso 3: Main recibió el mensaje para navegar a:', page); // <-- Añade esta línea
-  const win = BrowserWindow.getAllWindows()[0];
-  if (win) {
-    win.loadFile(path.join(__dirname, `html/${page}`));
-  }
+  const win = BrowserWindow.getAllWindows()[0];
+  if (win) {
+    win.loadFile(path.join(__dirname, `html/${page}`));
+  }
 });
 
-// Cierra la aplicación cuando todas las ventanas se han cerrado (excepto en macOS).
+// 8. Cierre de la app (esto está perfecto)
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
