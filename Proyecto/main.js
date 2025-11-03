@@ -8,7 +8,7 @@ const path = require('node:path');
 // Maneja los eventos de instalación/desinstalación de Squirrel en Windows
 // ANTES de que la app haga cualquier otra cosa.
 if (require('electron-squirrel-startup')) {
-  app.quit();
+  app.quit();
 }
 
 // 3. Función que crea la ventana principal del navegador.
@@ -27,10 +27,24 @@ const createWindow = () => {
 
 // 4. Llama a createWindow() CUANDO la app está lista.
 app.whenReady().then(() => {
-  require('update-electron-app')();
 
-  // 6. Creamos la ventana
+  // --- ¡CAMBIO CRUCIAL DE ORDEN! ---
+
+  // 5. PRIMERO creamos la ventana.
+  // Esto asegura que tu app se abra SIEMPRE.
   createWindow();
+
+  // 6. DESPUÉS, intentamos buscar actualizaciones.
+  // Lo envolvemos en un try...catch para que, si falla,
+  // no detenga la aplicación.
+  try {
+    require('update-electron-app')();
+    console.log('Buscando actualizaciones en segundo plano...');
+  } catch (error) {
+    console.error('Error al iniciar el auto-actualizador:', error);
+  }
+
+  // --- FIN DEL CAMBIO ---
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
