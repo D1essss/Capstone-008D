@@ -27,19 +27,10 @@ const createWindow = () => {
 
 // 4. Llama a createWindow() CUANDO la app está lista.
 app.whenReady().then(() => {
-
-  // --- ¡CAMBIO CRUCIAL DE ORDEN! ---
-
-  // 5. PRIMERO creamos la ventana.
-  // Esto asegura que tu app se abra SIEMPRE.
   createWindow();
-
-  // 6. DESPUÉS, intentamos buscar actualizaciones.
-  // Lo envolvemos en un try...catch para que, si falla,
-  // no detenga la aplicación.
   try {
     console.log('Intentando iniciar el actualizador...'); // Para el log
-    require('update-electron-app')();
+    require('update-electron-app').default();
     console.log('Actualizador iniciado con éxito.'); // Para el log
     console.log('Buscando actualizaciones en segundo plano...');
   } catch (error) {
