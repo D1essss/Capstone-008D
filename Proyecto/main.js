@@ -1,6 +1,6 @@
 
-const { app, BrowserWindow, ipcMain,dialog } = require('electron');
-const path = require('node:path');
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { join } from 'node:path';
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -12,10 +12,10 @@ const win = new BrowserWindow({
  width: 1000,
  height: 800,
  webPreferences: {
- preload: path.join(__dirname, 'preload.js')
+ preload: join(__dirname, 'preload.js')
 }
  });
-win.loadFile(path.join(__dirname, 'html/iniciosesion.html'));
+win.loadFile(join(__dirname, 'html/iniciosesion.html'));
 };
 
 app.whenReady().then(() => {
@@ -46,7 +46,7 @@ createWindow();
 ipcMain.on('navigate', (event, page) => {
  const win = BrowserWindow.getAllWindows()[0];
  if (win) {
- win.loadFile(path.join(__dirname, `html/${page}`));
+ win.loadFile(join(__dirname, `html/${page}`));
  }
 });
 
