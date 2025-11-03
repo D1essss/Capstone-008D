@@ -1,7 +1,7 @@
 // main.js
 
 // 1. Módulos para controlar la aplicación
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain,dialog } = require('electron');
 const path = require('node:path');
 
 // 2. LA GUARDIA DE SQUIRREL (¡DEBE ESTAR AQUÍ!)
@@ -38,10 +38,16 @@ app.whenReady().then(() => {
   // Lo envolvemos en un try...catch para que, si falla,
   // no detenga la aplicación.
   try {
+    console.log('Intentando iniciar el actualizador...'); // Para el log
     require('update-electron-app')();
+    console.log('Actualizador iniciado con éxito.'); // Para el log
     console.log('Buscando actualizaciones en segundo plano...');
   } catch (error) {
     console.error('Error al iniciar el auto-actualizador:', error);
+    dialog.showErrorBox(
+      'Error del Auto-Actualizador',
+      'No se pudo iniciar el módulo de actualización. Por favor, reporta este error:\n\n' + error.message
+    );
   }
 
   // --- FIN DEL CAMBIO ---
