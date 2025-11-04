@@ -1,5 +1,6 @@
 
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog,require } from 'electron';
+import { error } from 'node:console';
 import { join } from 'node:path';
 
 if (require('electron-squirrel-startup')) {
@@ -21,7 +22,7 @@ win.loadFile(join(__dirname, 'html/iniciosesion.html'));
 app.whenReady().then(() => {
 createWindow();
   try {
-    console.log('Intentando iniciar el actualizador...'); 
+    console.log('Intentando iniciar el actualizador...' );
     require('update-electron-app')();
     console.log('Actualizador iniciado con éxito.'); 
     console.log('Buscando actualizaciones en segundo plano...');
