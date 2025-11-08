@@ -5,7 +5,7 @@ console.log("Paso 1: renderer.js se está ejecutando...");
 // Importa las funciones que necesitas de los SDKs de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, doc, getDoc,query,where } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,signOut} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import {  createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -140,8 +140,6 @@ function renderProductTable(productsToRender) {
     tableBody.appendChild(row);
   });
 }
-// --- FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS (Sin cambios) ---*/
-// --- FUNCIÓN PARA MOSTRAR EL HISTORIAL DE MOVIMIENTOS (ACTUALIZADA) ---
 async function mostrarRegistros() {
   const tableBody = document.getElementById('registro-table-body');
   tableBody.innerHTML = ''; // Limpiamos la tabla antes de añadir nuevos datos
@@ -265,39 +263,54 @@ document.addEventListener('DOMContentLoaded', () => {
 async function handleLogin() {
   const emailInput = document.getElementById('email-input');
   const passwordInput = document.getElementById('password-input');
-  const errorMessage = document.getElementById('error-message'); // Obtenemos el párrafo de error
+  const errorMessage = document.getElementById('error-message'); 
 
   const email = emailInput.value;
   const password = passwordInput.value;
 
-  // Limpia cualquier mensaje de error anterior
+
   errorMessage.textContent = '';
 
-  // 1. Validar campos vacíos y mostrar error en el párrafo
+ 
   if (!email || !password) {
     errorMessage.textContent = "Por favor, ingresa tu correo y contraseña.";
-    return; // Detiene la función
+    return; 
   }
-
-  // 2. Intentar iniciar sesión
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-   // 3. Revisar en Firestore si el usuario tiene un PIN configurado
     const userRef = doc(db, "empleados", user.uid);
     const userSnap = await getDoc(userRef);
+    const empleadoRef = doc(db, "empleados", user.uid);
+    const empleadoSnap = await getDoc(empleadoRef);
+    if (empleadoSnap.exists()) {
+          const empleadoData = empleadoSnap.data();
+          let nombreCargo = "";
+
+          if (empleadoData.cargo && typeof empleadoData.cargo === 'object' && empleadoData.cargo.path) {
+             const cargoSnap = await getDoc(empleadoData.cargo);
+             if (cargoSnap.exists()) nombreCargo = cargoSnap.data().nombrecargo || "";
+          } else if (typeof empleadoData.cargo === 'string') {
+             nombreCargo = empleadoData.cargo;
+          }
+
+          // Bloquear si es Reponedor
+          if (nombreCargo && nombreCargo.toLowerCase().trim() === "reponedor") {
+              await signOut(auth); 
+              errorMessage.textContent = "Acceso denegado: Los reponedores solo pueden usar la App Móvil.";
+              errorMessage.style.color = "red";
+              return;
+          }
+           sessionStorage.setItem('userRole', nombreCargo);
+      }
+      
 
     if (userSnap.exists() && userSnap.data().securityPin) {
-      // SÍ TIENE PIN: El usuario debe verificarlo.
-      // a. Guardamos el UID temporalmente para que la siguiente página sepa quién es.
       sessionStorage.setItem('uidFor2FA', user.uid);
       
-      // b. Redirigimos a la página de verificación de PIN.
       window.electronAPI.navigate('verificar-pin.html');
 
     } else {
-      // NO TIENE PIN: El usuario no ha configurado 2FA.
-      // Lo dejamos entrar directamente (comportamiento normal).
       sessionStorage.setItem('loggedInUserUid', user.uid);
       console.log("✅ Inicio de sesión exitoso (sin PIN):", user.uid);
       window.electronAPI.navigate('index.html');
@@ -498,4 +511,17 @@ document.getElementById("buscador").addEventListener("keyup", function() {
     }
   });
 });
+  if (document.getElementById('product-table-body')) {
+        const btnRegistrar = document.getElementById('btn-registrar-empleado');
+        const userRole = sessionStorage.getItem('userRole'); 
+        console.log("Rol detectado en Dashboard:", userRole);
+
+        if (btnRegistrar) {
+            if (!userRole || userRole.toLowerCase().trim() !== 'supervisor') {
+                btnRegistrar.style.display = 'none'; 
+            } else {
+                btnRegistrar.style.display = 'block'; 
+            }
+        }
+    }
 
