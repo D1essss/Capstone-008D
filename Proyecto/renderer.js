@@ -6,7 +6,7 @@ console.log("Paso 1: renderer.js se está ejecutando...");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, doc, getDoc,query,where } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,signOut} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { collection, getDocs,updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import {  createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
@@ -302,6 +302,12 @@ async function handleLogin() {
               return;
           }
            sessionStorage.setItem('userRole', nombreCargo);
+            if (empleadoData.activo === false) {
+              await signOut(auth);
+              errorMessage.textContent = "Tu cuenta ha sido desactivada. Contacta al supervisor.";
+              errorMessage.style.color = "red";
+            return;
+}
       }
       
 
@@ -511,6 +517,93 @@ document.getElementById("buscador").addEventListener("keyup", function() {
     }
   });
 });
+// =============================================================================
+// 3. GESTIÓN DE EMPLEADOS 
+// =============================================================================
+
+async function fetchEmployees() {
+    const tableBody = document.getElementById('employees-table-body');
+    if (!tableBody) return; 
+    
+    tableBody.innerHTML = '';
+
+    // --- ¡NUEVO! OBTENER EL UID DEL USUARIO ACTUAL ---
+    const currentUserUid = sessionStorage.getItem('loggedInUserUid');
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "empleados"));
+        
+        for (const docSnap of querySnapshot.docs) {
+            const emp = docSnap.data();
+            const uid = docSnap.id;
+
+            // --- ¡NUEVO! FILTRO DE AUTOPROTECCIÓN ---
+            // Si el UID del empleado es igual al mío, me salto esta iteración.
+            // Así no me muestro en la lista y no puedo desactivarme.
+            if (uid === currentUserUid) {
+                continue; 
+            }
+            // ----------------------------------------
+            
+            const isActive = emp.activo !== false; 
+
+            let cargoTexto = "Desconocido";
+            if (emp.cargo) {
+                if (typeof emp.cargo === 'object' && emp.cargo.path) {
+                    try {
+                        const cargoSnap = await getDoc(emp.cargo);
+                        if (cargoSnap.exists()) {
+                            cargoTexto = cargoSnap.data().nombrecargo || "Sin nombre";
+                        }
+                    } catch (err) { cargoTexto = "Error Ref"; }
+                } else if (typeof emp.cargo === 'string') {
+                    cargoTexto = emp.cargo;
+                }
+            }
+
+            const row = document.createElement('tr');
+            const statusClass = isActive ? 'status-en-stock' : 'status-sin-stock';
+            const statusText = isActive ? 'Activo' : 'Inactivo';
+            const btnColor = isActive ? 'var(--danger-color)' : 'var(--primary-color)';
+            const btnText = isActive ? 'Desactivar' : 'Activar';
+            const btnIcon = isActive ? 'fa-ban' : 'fa-check';
+
+            row.innerHTML = `
+                <td>${emp.nombre} ${emp.apellido}</td>
+                <td>${cargoTexto}</td>
+                <td>${emp.email}</td>
+                <td><span class="status-pill ${statusClass}">${statusText}</span></td>
+                <td>
+                    <button class="action-btn" style="color: ${btnColor}; font-weight: bold; border: 1px solid ${btnColor}; padding: 5px 10px; border-radius: 5px; cursor: pointer;" 
+                    onclick="window.toggleUserStatus('${uid}', ${isActive})">
+                        <i class="fas ${btnIcon}"></i> ${btnText}
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        }
+
+    } catch (error) {
+        console.error("Error cargando empleados:", error);
+    }
+}
+fetchEmployees(); 
+
+// Función global para el botón
+window.toggleUserStatus = async (uid, currentStatus) => {
+    const newStatus = !currentStatus;
+    const msg = newStatus ? "¿Reactivar usuario?" : "¿Desactivar usuario? No podrá entrar.";
+    
+    if (confirm(msg)) {
+        try {
+            await updateDoc(doc(db, "empleados", uid), { activo: newStatus });
+            fetchEmployees(); // Recargar tabla
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error al actualizar.");
+        }
+    }
+};
   if (document.getElementById('product-table-body')) {
         const btnRegistrar = document.getElementById('btn-registrar-empleado');
         const userRole = sessionStorage.getItem('userRole'); 
@@ -521,6 +614,14 @@ document.getElementById("buscador").addEventListener("keyup", function() {
                 btnRegistrar.style.display = 'none'; 
             } else {
                 btnRegistrar.style.display = 'block'; 
+            }
+        }
+        const btnTabPersonal = document.getElementById('tab-personal-btn');
+        if (btnTabPersonal) {
+            if (!userRole || userRole.toLowerCase().trim() !== 'supervisor') {
+                btnTabPersonal.style.display = 'none';
+            } else {
+                btnTabPersonal.style.display = 'inline-block';
             }
         }
     }

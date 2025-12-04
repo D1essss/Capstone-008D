@@ -40,6 +40,7 @@
           <div class="tabs-container">
   <button class="tab-button is-active" data-tab="inventario">Inventario</button>
   <button class="tab-button" data-tab="historial">Historial de Movimientos</button>
+  <button class="tab-button" data-tab="personal" id="tab-personal-btn" >Gestionar Personal</button>
 </div>
 
 <div class="tab-content-container">
@@ -89,6 +90,22 @@
     </thead>
     <tbody id="registro-table-body">
     </tbody>
+  </table>
+</div>
+<div id="personal" class="tab-content">
+  <h2>Gestión de Empleados</h2>
+  
+  <table class="inventory-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Cargo</th>
+        <th>Email</th>
+        <th>Estado</th> 
+        <th>Acción</th> </tr>
+    </thead>
+    <tbody id="employees-table-body">
+      </tbody>
   </table>
 </div>
         </main>
