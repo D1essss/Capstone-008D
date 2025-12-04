@@ -54,6 +54,7 @@ async function handleRegister() {
   const password = document.getElementById('password-input').value;
   const telefono = document.getElementById('telefono-input').value;
   const messageEl = document.getElementById('message');
+  const activo  = true;
 
   // Limpia el mensaje de error anterior
   messageEl.textContent = '';
@@ -87,9 +88,10 @@ async function handleRegister() {
     // --- Si todas las validaciones pasan, procedemos a registrar ---
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+  
 
     const cargoRef = doc(db, "cargo", cargoId);
-    const datosEmpleado = { nombre, apellido, rut, cargo: cargoRef, email,telefono };
+    const datosEmpleado = { nombre, apellido, rut, cargo: cargoRef, email,telefono,activo };
 
     await setDoc(doc(db, "empleados", user.uid), datosEmpleado);
 
